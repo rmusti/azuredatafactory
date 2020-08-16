@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "rmustiADF"
 		},
+		"AzureBlobStorageTempSynapse_connectionString": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
@@ -12,6 +15,9 @@
 			"value": ""
 		},
 		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"SqlDbAdventureWorks_connectionString": {
 			"value": ""
 		},
 		"SqlDbTaxiData_connectionString": {
