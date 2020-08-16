@@ -1,0 +1,35 @@
+{
+	"name": "TransformMovieData",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MovieDataCsv",
+						"type": "DatasetReference"
+					},
+					"name": "MovieData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AvgMovieRatingByYear",
+						"type": "DatasetReference"
+					},
+					"name": "AvgMovieRatingsbyYear"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterYear1990to2000"
+				},
+				{
+					"name": "AggMovieRatig"
+				}
+			],
+			"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> AvgMovieRatingsbyYear"
+		}
+	}
+}
