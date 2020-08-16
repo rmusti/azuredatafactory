@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "TransformMovie Dataflow",
+				"description": "This transforms movie data set",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
