@@ -7,7 +7,7 @@
 				"type": "AzureDataExplorerCommand",
 				"dependsOn": [
 					{
-						"activity": "Azure Data Explorer Command1",
+						"activity": "ADX Load Master Table",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "Azure Data Explorer Command1",
+				"name": "ADX Load Master Table",
 				"type": "AzureDataExplorerCommand",
 				"dependsOn": [],
 				"policy": {
