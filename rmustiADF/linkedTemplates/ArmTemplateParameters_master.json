@@ -11,6 +11,9 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
@@ -23,8 +26,20 @@
 		"SqlDbTaxiData_connectionString": {
 			"value": ""
 		},
+		"AzureDataExplorer1_servicePrincipalKey": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"AzureDataExplorer1_properties_typeProperties_tenant": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"AzureDataExplorer1_properties_typeProperties_servicePrincipalId": {
+			"value": "ab28c790-4e7a-4f81-8784-cd26a55bd7b8"
+		},
+		"AzureDataExplorer1_properties_typeProperties_database": {
+			"value": "SampleADX"
 		},
 		"containerUri": {
 			"value": ""

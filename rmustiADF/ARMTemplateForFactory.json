@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedService'"
@@ -31,9 +35,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlDbTaxiData'"
 		},
+		"AzureDataExplorer1_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataExplorer1'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"AzureDataExplorer1_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"AzureDataExplorer1_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "ab28c790-4e7a-4f81-8784-cd26a55bd7b8"
+		},
+		"AzureDataExplorer1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleADX"
 		}
 	},
 	"variables": {
@@ -510,6 +530,185 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LoadSQLDBtoSynapseDemo')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach_93w",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.cw_items",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy_93w",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "Source",
+											"value": "SalesLT.@{item().source.table}"
+										},
+										{
+											"name": "Destination",
+											"value": "SalesLT.@{item().destination.table}"
+										}
+									],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "SqlDWSink",
+											"allowPolyBase": true,
+											"polyBaseSettings": {
+												"rejectValue": 0,
+												"rejectType": "value",
+												"useTypeDefault": true
+											},
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": true,
+										"stagingSettings": {
+											"linkedServiceName": {
+												"referenceName": "AzureBlobStorageTempSynapse",
+												"type": "LinkedServiceReference"
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "SourceDataset_93w",
+											"type": "DatasetReference",
+											"parameters": {
+												"cw_table": "@item().source.table"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DestinationDataset_93w",
+											"type": "DatasetReference",
+											"parameters": {
+												"cw_table": "@item().destination.table"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"cw_items": {
+						"type": "Array",
+						"defaultValue": [
+							{
+								"source": {
+									"table": "Address"
+								},
+								"destination": {
+									"table": "Address"
+								}
+							},
+							{
+								"source": {
+									"table": "Customer"
+								},
+								"destination": {
+									"table": "Customer"
+								}
+							},
+							{
+								"source": {
+									"table": "CustomerAddress"
+								},
+								"destination": {
+									"table": "CustomerAddress"
+								}
+							},
+							{
+								"source": {
+									"table": "Product"
+								},
+								"destination": {
+									"table": "Product"
+								}
+							},
+							{
+								"source": {
+									"table": "ProductCategory"
+								},
+								"destination": {
+									"table": "ProductCategory"
+								}
+							},
+							{
+								"source": {
+									"table": "ProductDescription"
+								},
+								"destination": {
+									"table": "ProductDescription"
+								}
+							},
+							{
+								"source": {
+									"table": "ProductModel"
+								},
+								"destination": {
+									"table": "ProductModel"
+								}
+							},
+							{
+								"source": {
+									"table": "ProductModelProductDescription"
+								},
+								"destination": {
+									"table": "ProductModelProductDescription"
+								}
+							},
+							{
+								"source": {
+									"table": "SalesOrderDetail"
+								},
+								"destination": {
+									"table": "SalesOrderDetail"
+								}
+							},
+							{
+								"source": {
+									"table": "SalesOrderHeader"
+								},
+								"destination": {
+									"table": "SalesOrderHeader"
+								}
+							}
+						]
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_93w')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_93w')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageTempSynapse')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/TransformMovieData')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -621,6 +820,35 @@
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DestinationDataset_4zi')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_table": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": {
+						"value": "@dataset().cw_table",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_93w')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -787,6 +1015,35 @@
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_4zi')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlDbAdventureWorks",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_table": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": {
+						"value": "@dataset().cw_table",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlDbAdventureWorks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_93w')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1106,6 +1363,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseLinkedService')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1246,6 +1516,60 @@
 				"[concat(variables('factoryId'), '/datasets/MovieDataCsv')]",
 				"[concat(variables('factoryId'), '/datasets/AvgMovieRatingByYear')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ADX Load App Tables",
+						"type": "AzureDataExplorerCommand",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"command": ".set-or-append OOCLAppData <|\n    OOCLMasterData\n    | extend payloadstr = parse_json(mest_payloadInStr)\n    | extend payload_Key = payloadstr.key , eecEventHistInfo_eventUuid  = payloadstr.eecEventHistInfo.eventUuid , eecEventHistInfo_eventDateTimeGmt =payloadstr.eecEventHistInfo.eventDateTimeGmt \n    | project mest_application, mest_destination,mest_senderTimestamp,payload_Key , eecEventHistInfo_eventUuid ,eecEventHistInfo_eventDateTimeGmt\n",
+							"commandTimeout": "00:20:00"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDataExplorer1",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataExplorer1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataExplorer1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDataExplorer",
+				"typeProperties": {
+					"endpoint": "https://rmustiadxcluster.eastus.kusto.windows.net",
+					"tenant": "[parameters('AzureDataExplorer1_properties_typeProperties_tenant')]",
+					"servicePrincipalId": "[parameters('AzureDataExplorer1_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataExplorer1_servicePrincipalKey')]"
+					},
+					"database": "[parameters('AzureDataExplorer1_properties_typeProperties_database')]"
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }
