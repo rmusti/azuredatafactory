@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Azure Data Explorer Command1",
+				"name": "ADX Load App Tables",
 				"type": "AzureDataExplorerCommand",
 				"dependsOn": [],
 				"policy": {
