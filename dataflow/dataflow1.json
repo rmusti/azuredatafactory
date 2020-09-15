@@ -1,0 +1,32 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableWWI",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"schemaLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "adlsgen2"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tCustomerID as integer,\n\t\tCustomerName as string,\n\t\tBillToCustomerID as integer,\n\t\tCustomerCategoryID as integer,\n\t\tBuyingGroupID as integer,\n\t\tPrimaryContactPersonID as integer,\n\t\tAlternateContactPersonID as integer,\n\t\tDeliveryMethodID as integer,\n\t\tDeliveryCityID as integer,\n\t\tPostalCityID as integer,\n\t\tCreditLimit as decimal(18,2),\n\t\tAccountOpenedDate as date,\n\t\tStandardDiscountPercentage as decimal(18,3),\n\t\tIsStatementSent as boolean,\n\t\tIsOnCreditHold as boolean,\n\t\tPaymentDays as integer,\n\t\tPhoneNumber as string,\n\t\tFaxNumber as string,\n\t\tDeliveryRun as string,\n\t\tRunPosition as string,\n\t\tWebsiteURL as string,\n\t\tDeliveryAddressLine1 as string,\n\t\tDeliveryAddressLine2 as string,\n\t\tDeliveryPostalCode as string,\n\t\tDeliveryLocation as binary,\n\t\tPostalAddressLine1 as string,\n\t\tPostalAddressLine2 as string,\n\t\tPostalPostalCode as string,\n\t\tLastEditedBy as integer,\n\t\tValidFrom as timestamp,\n\t\tValidTo as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tentity: 'Sales.Customer',\n\tformat: 'cdm',\n\tcorpusPath: 'WWI',\n\tfolderPath: '',\n\tfileSystem: 'sqlondemand1',\n\tcolumnDelimiter: ',',\n\tcolumnNamesAsHeader: false,\n\tcorpusStore: 'adlsgen2',\n\tadlsgen2_fileSystem: 'CDMData',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> adlsgen2"
+		}
+	}
+}
