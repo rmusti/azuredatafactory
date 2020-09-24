@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageTempSynapse'"
 		},
+		"AzureDataExplorer1_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataExplorer1'"
+		},
 		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
@@ -22,6 +26,10 @@
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedService'"
+		},
+		"AzureSqlDbWWI_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDbWWI'"
 		},
 		"AzureSynapseAnalytics1_connectionString": {
 			"type": "secureString",
@@ -35,14 +43,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlDbTaxiData'"
 		},
-		"AzureDataExplorer1_servicePrincipalKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataExplorer1'"
-		},
-		"AzureDataLakeStorage1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
-		},
 		"AzureDataExplorer1_properties_typeProperties_tenant": {
 			"type": "string",
 			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
@@ -54,6 +54,10 @@
 		"AzureDataExplorer1_properties_typeProperties_database": {
 			"type": "string",
 			"defaultValue": "SampleADX"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -85,6 +89,9 @@
 					"AzureBlobStorageTempSynapse_connectionString": {
 						"value": "[parameters('AzureBlobStorageTempSynapse_connectionString')]"
 					},
+					"AzureDataExplorer1_servicePrincipalKey": {
+						"value": "[parameters('AzureDataExplorer1_servicePrincipalKey')]"
+					},
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
@@ -93,6 +100,9 @@
 					},
 					"AzureSqlDatabaseLinkedService_connectionString": {
 						"value": "[parameters('AzureSqlDatabaseLinkedService_connectionString')]"
+					},
+					"AzureSqlDbWWI_connectionString": {
+						"value": "[parameters('AzureSqlDbWWI_connectionString')]"
 					},
 					"AzureSynapseAnalytics1_connectionString": {
 						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
@@ -103,12 +113,6 @@
 					"SqlDbTaxiData_connectionString": {
 						"value": "[parameters('SqlDbTaxiData_connectionString')]"
 					},
-					"AzureDataExplorer1_servicePrincipalKey": {
-						"value": "[parameters('AzureDataExplorer1_servicePrincipalKey')]"
-					},
-					"AzureDataLakeStorage1_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
-					},
 					"AzureDataExplorer1_properties_typeProperties_tenant": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_tenant')]"
 					},
@@ -117,6 +121,9 @@
 					},
 					"AzureDataExplorer1_properties_typeProperties_database": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_database')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
 					}
 				}
 			},

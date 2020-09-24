@@ -8,6 +8,9 @@
 		"AzureBlobStorageTempSynapse_connectionString": {
 			"value": ""
 		},
+		"AzureDataExplorer1_servicePrincipalKey": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
@@ -15,6 +18,9 @@
 			"value": ""
 		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDbWWI_connectionString": {
 			"value": ""
 		},
 		"AzureSynapseAnalytics1_connectionString": {
@@ -26,12 +32,6 @@
 		"SqlDbTaxiData_connectionString": {
 			"value": ""
 		},
-		"AzureDataExplorer1_servicePrincipalKey": {
-			"value": ""
-		},
-		"AzureDataLakeStorage1_properties_typeProperties_url": {
-			"value": "https://mysynapsestorage.dfs.core.windows.net"
-		},
 		"AzureDataExplorer1_properties_typeProperties_tenant": {
 			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
 		},
@@ -40,6 +40,9 @@
 		},
 		"AzureDataExplorer1_properties_typeProperties_database": {
 			"value": "SampleADX"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://mysynapsestorage.dfs.core.windows.net"
 		}
 	}
 }
