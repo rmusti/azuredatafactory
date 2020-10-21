@@ -1,0 +1,20 @@
+{
+	"name": "Avro1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "14.avro",
+				"folderPath": "avro",
+				"fileSystem": "sqlondemand1"
+			}
+		},
+		"schema": {}
+	}
+}
