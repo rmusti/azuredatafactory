@@ -1,0 +1,113 @@
+{
+	"name": "fldata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "flightdata.csv",
+				"folderPath": "csv/Flight",
+				"fileSystem": "sqlondemand1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "YEAR",
+				"type": "String"
+			},
+			{
+				"name": "FL_DATE",
+				"type": "String"
+			},
+			{
+				"name": "OP_UNIQUE_CARRIER",
+				"type": "String"
+			},
+			{
+				"name": "OP_CARRIER_AIRLINE_ID",
+				"type": "String"
+			},
+			{
+				"name": "OP_CARRIER_FL_NUM",
+				"type": "String"
+			},
+			{
+				"name": "ORIGIN_AIRPORT_ID",
+				"type": "String"
+			},
+			{
+				"name": "ORIGIN",
+				"type": "String"
+			},
+			{
+				"name": "ORIGIN_CITY_NAME",
+				"type": "String"
+			},
+			{
+				"name": "ORIGIN_STATE_ABR",
+				"type": "String"
+			},
+			{
+				"name": "DEST_AIRPORT_ID",
+				"type": "String"
+			},
+			{
+				"name": "DEST",
+				"type": "String"
+			},
+			{
+				"name": "DEST_CITY_NAME",
+				"type": "String"
+			},
+			{
+				"name": "DEST_STATE_ABR",
+				"type": "String"
+			},
+			{
+				"name": "DEP_DELAY",
+				"type": "String"
+			},
+			{
+				"name": "DEP_DELAY_NEW",
+				"type": "String"
+			},
+			{
+				"name": "ARR_TIME",
+				"type": "String"
+			},
+			{
+				"name": "ARR_DELAY_NEW",
+				"type": "String"
+			},
+			{
+				"name": "CARRIER_DELAY",
+				"type": "String"
+			},
+			{
+				"name": "WEATHER_DELAY",
+				"type": "String"
+			},
+			{
+				"name": "NAS_DELAY",
+				"type": "String"
+			},
+			{
+				"name": "SECURITY_DELAY",
+				"type": "String"
+			},
+			{
+				"name": "LATE_AIRCRAFT_DELAY",
+				"type": "String"
+			}
+		]
+	}
+}
