@@ -26,11 +26,17 @@
 		"AzureSynapseAnalytics1_connectionString": {
 			"value": ""
 		},
+		"AzureSynapseAnalytics2_connectionString": {
+			"value": ""
+		},
 		"SqlDbAdventureWorks_connectionString": {
 			"value": ""
 		},
 		"SqlDbTaxiData_connectionString": {
 			"value": ""
+		},
+		"AzureDataExplorer1_properties_typeProperties_endpoint": {
+			"value": "https://rmustiadxcluster.eastus.kusto.windows.net"
 		},
 		"AzureDataExplorer1_properties_typeProperties_tenant": {
 			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
@@ -43,6 +49,9 @@
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://jsonplaceholder.typicode.com/todos/1"
 		},
 		"containerUri": {
 			"value": ""

@@ -35,6 +35,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
 		},
+		"AzureSynapseAnalytics2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
+		},
 		"SqlDbAdventureWorks_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlDbAdventureWorks'"
@@ -42,6 +46,10 @@
 		"SqlDbTaxiData_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlDbTaxiData'"
+		},
+		"AzureDataExplorer1_properties_typeProperties_endpoint": {
+			"type": "string",
+			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
 		},
 		"AzureDataExplorer1_properties_typeProperties_tenant": {
 			"type": "string",
@@ -58,6 +66,10 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
 		"containerUri": {
 			"type": "string",
@@ -107,11 +119,17 @@
 					"AzureSynapseAnalytics1_connectionString": {
 						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
 					},
+					"AzureSynapseAnalytics2_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics2_connectionString')]"
+					},
 					"SqlDbAdventureWorks_connectionString": {
 						"value": "[parameters('SqlDbAdventureWorks_connectionString')]"
 					},
 					"SqlDbTaxiData_connectionString": {
 						"value": "[parameters('SqlDbTaxiData_connectionString')]"
+					},
+					"AzureDataExplorer1_properties_typeProperties_endpoint": {
+						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_endpoint')]"
 					},
 					"AzureDataExplorer1_properties_typeProperties_tenant": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_tenant')]"
@@ -124,6 +142,9 @@
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"HttpServer1_properties_typeProperties_url": {
+						"value": "[parameters('HttpServer1_properties_typeProperties_url')]"
 					}
 				}
 			},
