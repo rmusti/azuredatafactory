@@ -13,6 +13,149 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_93w')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cw_table": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": {
+						"value": "@dataset().cw_table",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FlightData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "flightdata.csv",
+						"folderPath": "csv/flight",
+						"fileSystem": "sqlondemand1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "YEAR",
+						"type": "String"
+					},
+					{
+						"name": "FL_DATE",
+						"type": "String"
+					},
+					{
+						"name": "OP_UNIQUE_CARRIER",
+						"type": "String"
+					},
+					{
+						"name": "OP_CARRIER_AIRLINE_ID",
+						"type": "String"
+					},
+					{
+						"name": "OP_CARRIER_FL_NUM",
+						"type": "String"
+					},
+					{
+						"name": "ORIGIN_AIRPORT_ID",
+						"type": "String"
+					},
+					{
+						"name": "ORIGIN",
+						"type": "String"
+					},
+					{
+						"name": "ORIGIN_CITY_NAME",
+						"type": "String"
+					},
+					{
+						"name": "ORIGIN_STATE_ABR",
+						"type": "String"
+					},
+					{
+						"name": "DEST_AIRPORT_ID",
+						"type": "String"
+					},
+					{
+						"name": "DEST",
+						"type": "String"
+					},
+					{
+						"name": "DEST_CITY_NAME",
+						"type": "String"
+					},
+					{
+						"name": "DEST_STATE_ABR",
+						"type": "String"
+					},
+					{
+						"name": "DEP_DELAY",
+						"type": "String"
+					},
+					{
+						"name": "DEP_DELAY_NEW",
+						"type": "String"
+					},
+					{
+						"name": "ARR_TIME",
+						"type": "String"
+					},
+					{
+						"name": "ARR_DELAY_NEW",
+						"type": "String"
+					},
+					{
+						"name": "CARRIER_DELAY",
+						"type": "String"
+					},
+					{
+						"name": "WEATHER_DELAY",
+						"type": "String"
+					},
+					{
+						"name": "NAS_DELAY",
+						"type": "String"
+					},
+					{
+						"name": "SECURITY_DELAY",
+						"type": "String"
+					},
+					{
+						"name": "LATE_AIRCRAFT_DELAY",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/MovieDataCsv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -447,6 +590,37 @@
 					"schema": "dbo",
 					"table": "watermarktable"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storedproc')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TPT_Data_Latency",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[opms2_tpt].[CalcLatency_event]"
+						},
+						"linkedServiceName": {
+							"referenceName": "dhlpocsynapse",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -967,7 +1141,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_93w')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_93w')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_93w')]"
 			]
 		},
 		{
@@ -1006,7 +1181,9 @@
 					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/FlightData')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/JoinAndAggregateData')]",
@@ -1097,199 +1274,35 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/IngestAndTransformTaxiData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/tpt-data-latency-trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "IngestIntoADLS",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "SqlDBTaxiData",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "TripDataCSV",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "JoinAndAggregateData",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "IngestIntoADLS",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "JoinAndAggregateData",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"TripDataCSV": {},
-									"TripFareSQL": {},
-									"SQLDWSink": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
+				"description": "Run every 2 min to calculate latency",
 				"annotations": [],
-				"lastPublishTime": "2020-08-15T15:29:19Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SqlDBTaxiData')]",
-				"[concat(variables('factoryId'), '/datasets/TripDataCSV')]",
-				"[concat(variables('factoryId'), '/dataflows/JoinAndAggregateData')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformFlightData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
+				"runtimeState": "Started",
+				"pipelines": [
 					{
-						"name": "AverageDelay",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
+						"pipelineReference": {
+							"referenceName": "storedproc",
+							"type": "PipelineReference"
 						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "AverageDelay",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+						"parameters": {}
 					}
 				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/AverageDelay')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformMovieData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "TransformMovie Dataflow",
-						"description": "This transforms movie data set",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "TransformMovieData",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"MovieData": {},
-									"AvgMovieRatingsbyYear": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 2,
+						"startTime": "2021-02-04T12:19:00Z",
+						"endTime": "2021-02-05T12:19:00Z",
+						"timeZone": "UTC"
 					}
-				],
-				"annotations": [],
-				"lastPublishTime": "2020-08-15T15:42:48Z"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/TransformMovieData')]"
+				"[concat(variables('factoryId'), '/pipelines/storedproc')]"
 			]
 		}
 	]

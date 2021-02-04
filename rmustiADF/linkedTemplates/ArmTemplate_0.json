@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureDataLakeStoragedhl_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStoragedhl'"
+		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
@@ -47,6 +51,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlDbTaxiData'"
 		},
+		"dhlpocsynapse_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'dhlpocsynapse'"
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
@@ -66,6 +74,10 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
 		},
 		"HttpServer1_properties_typeProperties_url": {
 			"type": "string",
@@ -121,6 +133,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStoragedhl')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStoragedhl_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStoragedhl_accountKey')]"
 					}
 				}
 			},
@@ -228,6 +257,19 @@
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
 					"connectionString": "[parameters('SqlDbTaxiData_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dhlpocsynapse')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('dhlpocsynapse_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -596,153 +638,6 @@
 					"quoteChar": "\""
 				},
 				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_93w')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSynapseAnalytics1",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"cw_table": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "SalesLT",
-					"table": {
-						"value": "@dataset().cw_table",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/FlightData')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "flightdata.csv",
-						"folderPath": "csv/flight",
-						"fileSystem": "sqlondemand1"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "YEAR",
-						"type": "String"
-					},
-					{
-						"name": "FL_DATE",
-						"type": "String"
-					},
-					{
-						"name": "OP_UNIQUE_CARRIER",
-						"type": "String"
-					},
-					{
-						"name": "OP_CARRIER_AIRLINE_ID",
-						"type": "String"
-					},
-					{
-						"name": "OP_CARRIER_FL_NUM",
-						"type": "String"
-					},
-					{
-						"name": "ORIGIN_AIRPORT_ID",
-						"type": "String"
-					},
-					{
-						"name": "ORIGIN",
-						"type": "String"
-					},
-					{
-						"name": "ORIGIN_CITY_NAME",
-						"type": "String"
-					},
-					{
-						"name": "ORIGIN_STATE_ABR",
-						"type": "String"
-					},
-					{
-						"name": "DEST_AIRPORT_ID",
-						"type": "String"
-					},
-					{
-						"name": "DEST",
-						"type": "String"
-					},
-					{
-						"name": "DEST_CITY_NAME",
-						"type": "String"
-					},
-					{
-						"name": "DEST_STATE_ABR",
-						"type": "String"
-					},
-					{
-						"name": "DEP_DELAY",
-						"type": "String"
-					},
-					{
-						"name": "DEP_DELAY_NEW",
-						"type": "String"
-					},
-					{
-						"name": "ARR_TIME",
-						"type": "String"
-					},
-					{
-						"name": "ARR_DELAY_NEW",
-						"type": "String"
-					},
-					{
-						"name": "CARRIER_DELAY",
-						"type": "String"
-					},
-					{
-						"name": "WEATHER_DELAY",
-						"type": "String"
-					},
-					{
-						"name": "NAS_DELAY",
-						"type": "String"
-					},
-					{
-						"name": "SECURITY_DELAY",
-						"type": "String"
-					},
-					{
-						"name": "LATE_AIRCRAFT_DELAY",
-						"type": "String"
-					}
-				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"

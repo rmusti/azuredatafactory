@@ -14,6 +14,9 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureDataLakeStoragedhl_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
@@ -35,6 +38,9 @@
 		"SqlDbTaxiData_connectionString": {
 			"value": ""
 		},
+		"dhlpocsynapse_connectionString": {
+			"value": ""
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"value": "https://rmustiadxcluster.eastus.kusto.windows.net"
 		},
@@ -49,6 +55,9 @@
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
+			"value": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
 		},
 		"HttpServer1_properties_typeProperties_url": {
 			"value": "https://jsonplaceholder.typicode.com/todos/1"
