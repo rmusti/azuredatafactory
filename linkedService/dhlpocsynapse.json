@@ -1,0 +1,12 @@
+{
+	"name": "dhlpocsynapse",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=opms.database.windows.net;initial catalog=syn-POC-EUWest02-reset07;user id=opms_admin",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlJNVVNUSUFERl8xNjBiODNiNC1iMjA4LTQwY2EtYThlMS1mYWU5YjA4Y2VlOWIiDQp9"
+		}
+	}
+}
