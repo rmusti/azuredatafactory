@@ -1,0 +1,28 @@
+{
+	"name": "storedproc",
+	"properties": {
+		"activities": [
+			{
+				"name": "TPT_Data_Latency",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[opms2_tpt].[CalcLatency_event]"
+				},
+				"linkedServiceName": {
+					"referenceName": "dhlpocsynapse",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

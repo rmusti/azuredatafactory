@@ -1,0 +1,26 @@
+{
+	"name": "tpt-data-latency-trigger",
+	"properties": {
+		"description": "Run every 2 min to calculate latency",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "storedproc",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 2,
+				"startTime": "2021-02-04T12:19:00Z",
+				"endTime": "2021-02-05T12:19:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
