@@ -2135,6 +2135,38 @@
 				"[concat(variables('factoryId'), '/datasets/MovieDataCsv')]",
 				"[concat(variables('factoryId'), '/datasets/AvgMovieRatingByYear')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_stored_proc_latency')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger stored proc to check latency every minute",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "storedproc",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1,
+						"startTime": "2021-02-05T05:29:00Z",
+						"endTime": "2021-02-06T05:29:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/storedproc')]"
+			]
 		}
 	]
 }

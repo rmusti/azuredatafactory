@@ -1268,112 +1268,34 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/IngestAndTransformTaxiData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/trigger_stored_proc_latency')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
+				"description": "Trigger stored proc to check latency every minute",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
 					{
-						"name": "IngestIntoADLS",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
+						"pipelineReference": {
+							"referenceName": "storedproc",
+							"type": "PipelineReference"
 						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "SqlDBTaxiData",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "TripDataCSV",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "JoinAndAggregateData",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "IngestIntoADLS",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "JoinAndAggregateData",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"TripDataCSV": {},
-									"TripFareSQL": {},
-									"SQLDWSink": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+						"parameters": {}
 					}
 				],
-				"annotations": [],
-				"lastPublishTime": "2020-08-15T15:29:19Z"
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1,
+						"startTime": "2021-02-05T05:29:00Z",
+						"endTime": "2021-02-06T05:29:00Z",
+						"timeZone": "UTC"
+					}
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SqlDBTaxiData')]",
-				"[concat(variables('factoryId'), '/datasets/TripDataCSV')]",
-				"[concat(variables('factoryId'), '/dataflows/JoinAndAggregateData')]"
-			]
+			"dependsOn": []
 		}
 	]
 }
