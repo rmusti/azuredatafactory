@@ -3,24 +3,7 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "IncrementalLoadSynapse",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"windowStart": {
-						"type": "Expression",
-						"value": "@{addminutes(trigger().scheduledTime, -5)}"
-					},
-					"windowEnd": {
-						"type": "Expression",
-						"value": "@trigger().scheduledTime"
-					}
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
