@@ -65,6 +65,110 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_xx2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "VendorID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "tpep_pickup_datetime",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "tpep_dropoff_datetime",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "passenger_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "trip_distance",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "RatecodeID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "store_and_fwd_flag",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PULocationID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "DOLocationID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "payment_type",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "fare_amount",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "extra",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "mta_tax",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "tip_amount",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "tolls_amount",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "improvement_surcharge",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "total_amount",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "yellow_tripdata"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/FlightData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -362,6 +466,102 @@
 						"type": "Expression"
 					}
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_xx2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "yellowtaxi",
+						"fileSystem": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "VendorID",
+						"type": "String"
+					},
+					{
+						"name": "tpep_pickup_datetime",
+						"type": "String"
+					},
+					{
+						"name": "tpep_dropoff_datetime",
+						"type": "String"
+					},
+					{
+						"name": "passenger_count",
+						"type": "String"
+					},
+					{
+						"name": "trip_distance",
+						"type": "String"
+					},
+					{
+						"name": "RatecodeID",
+						"type": "String"
+					},
+					{
+						"name": "store_and_fwd_flag",
+						"type": "String"
+					},
+					{
+						"name": "PULocationID",
+						"type": "String"
+					},
+					{
+						"name": "DOLocationID",
+						"type": "String"
+					},
+					{
+						"name": "payment_type",
+						"type": "String"
+					},
+					{
+						"name": "fare_amount",
+						"type": "String"
+					},
+					{
+						"name": "extra",
+						"type": "String"
+					},
+					{
+						"name": "mta_tax",
+						"type": "String"
+					},
+					{
+						"name": "tip_amount",
+						"type": "String"
+					},
+					{
+						"name": "tolls_amount",
+						"type": "String"
+					},
+					{
+						"name": "improvement_surcharge",
+						"type": "String"
+					},
+					{
+						"name": "total_amount",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -962,6 +1162,268 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/IncrementalLoadSynapse')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_xx2",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "adftutorial/yellowtaxi/"
+							},
+							{
+								"name": "Destination",
+								"value": "dbo.yellow_tripdata"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"modifiedDatetimeStart": {
+										"value": "@pipeline().parameters.windowStart",
+										"type": "Expression"
+									},
+									"modifiedDatetimeEnd": {
+										"value": "@pipeline().parameters.windowEnd",
+										"type": "Expression"
+									},
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "VendorID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VendorID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "tpep_pickup_datetime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tpep_pickup_datetime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "tpep_dropoff_datetime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tpep_dropoff_datetime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "passenger_count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "passenger_count",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "trip_distance",
+											"type": "String"
+										},
+										"sink": {
+											"name": "trip_distance",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "RatecodeID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "RatecodeID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "store_and_fwd_flag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "store_and_fwd_flag",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PULocationID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PULocationID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "DOLocationID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DOLocationID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "payment_type",
+											"type": "String"
+										},
+										"sink": {
+											"name": "payment_type",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "fare_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "fare_amount",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "extra",
+											"type": "String"
+										},
+										"sink": {
+											"name": "extra",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "mta_tax",
+											"type": "String"
+										},
+										"sink": {
+											"name": "mta_tax",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "tip_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tip_amount",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "tolls_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tolls_amount",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "improvement_surcharge",
+											"type": "String"
+										},
+										"sink": {
+											"name": "improvement_surcharge",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "total_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "total_amount",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_xx2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_xx2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"windowStart": {
+						"type": "String"
+					},
+					"windowEnd": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_xx2')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_xx2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LoadSQLDBtoSynapseDemo')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1137,134 +1599,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SourceDataset_93w')]",
 				"[concat(variables('factoryId'), '/datasets/DestinationDataset_93w')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AverageDelay')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "FlightData",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "AvgFlightDelay",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "AverageWeatherDelay"
-						},
-						{
-							"name": "filterwetherdelay"
-						}
-					],
-					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/FlightData')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/JoinAndAggregateData')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "TripDataCSV",
-								"type": "DatasetReference"
-							},
-							"name": "TripDataCSV"
-						},
-						{
-							"dataset": {
-								"referenceName": "SqlDbTripFare",
-								"type": "DatasetReference"
-							},
-							"name": "TripFareSQL"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "AzureSynapseAnalyticsTable1",
-								"type": "DatasetReference"
-							},
-							"name": "SQLDWSink"
-						}
-					],
-					"transformations": [
-						{
-							"name": "InnerJoinWithTripFare"
-						},
-						{
-							"name": "AggByPaymentType"
-						}
-					],
-					"script": "source(output(\n\t\tmedallion as string,\n\t\thack_license as string,\n\t\tvendor_id as string,\n\t\trate_code as string,\n\t\tstore_and_fwd_flag as string,\n\t\tpickup_datetime as string,\n\t\tdropoff_datetime as string,\n\t\tpassenger_count as string,\n\t\ttrip_time_in_secs as string,\n\t\ttrip_distance as string,\n\t\tpickup_longitude as string,\n\t\tpickup_latitude as string,\n\t\tdropoff_longitude as string,\n\t\tdropoff_latitude as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> TripDataCSV\nsource(output(\n\t\tmedallion as string,\n\t\thack_license as string,\n\t\tvendor_id as string,\n\t\tpickup_datetime as string,\n\t\tpayment_type as string,\n\t\tfare_amount as string,\n\t\tsurcharge as string,\n\t\tmta_tax as string,\n\t\ttip_amount as string,\n\t\ttolls_amount as string,\n\t\ttotal_amount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TripFareSQL\nTripDataCSV, TripFareSQL join(TripDataCSV@medallion == TripFareSQL@medallion\n\t&& TripDataCSV@hack_license == TripFareSQL@hack_license\n\t&& TripDataCSV@vendor_id == TripFareSQL@vendor_id\n\t&& TripDataCSV@pickup_datetime == TripFareSQL@pickup_datetime,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> InnerJoinWithTripFare\nInnerJoinWithTripFare aggregate(groupBy(payment_type),\n\tAverage_Fare = avg(toInteger(total_amount)),\n\t\ttotal_trip_distance = sum(toInteger(trip_distance))) ~> AggByPaymentType\nAggByPaymentType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tstaged: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SQLDWSink"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TripDataCSV')]",
-				"[concat(variables('factoryId'), '/datasets/SqlDbTripFare')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformMovieData')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "MovieDataCsv",
-								"type": "DatasetReference"
-							},
-							"name": "MovieData"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "AvgMovieRatingByYear",
-								"type": "DatasetReference"
-							},
-							"name": "AvgMovieRatingsbyYear"
-						}
-					],
-					"transformations": [
-						{
-							"name": "FilterYear1990to2000"
-						},
-						{
-							"name": "AggMovieRatig"
-						}
-					],
-					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> AvgMovieRatingsbyYear"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/MovieDataCsv')]"
 			]
 		},
 		{

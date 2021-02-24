@@ -83,6 +83,14 @@
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
+		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@{addminutes(trigger().scheduledTime, -5)}"
+		},
+		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -204,6 +212,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart": {
+						"value": "[parameters('Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart')]"
+					},
+					"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd": {
+						"value": "[parameters('Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd')]"
 					}
 				}
 			},
