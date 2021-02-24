@@ -62,11 +62,11 @@
 		"HttpServer1_properties_typeProperties_url": {
 			"value": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart": {
-			"value": "@{addminutes(trigger().scheduledTime, -5)}"
+		"Trigger_r95_properties_pipeline_parameters_windowStart": {
+			"value": "@trigger().outputs.windowStartTime"
 		},
-		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd": {
-			"value": "@trigger().scheduledTime"
+		"Trigger_r95_properties_pipeline_parameters_windowEnd": {
+			"value": "@trigger().outputs.windowEndTime"
 		},
 		"containerUri": {
 			"value": ""

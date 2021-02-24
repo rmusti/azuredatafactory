@@ -83,13 +83,13 @@
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart": {
+		"Trigger_r95_properties_pipeline_parameters_windowStart": {
 			"type": "string",
-			"defaultValue": "@{addminutes(trigger().scheduledTime, -5)}"
+			"defaultValue": "@trigger().outputs.windowStartTime"
 		},
-		"Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd": {
+		"Trigger_r95_properties_pipeline_parameters_windowEnd": {
 			"type": "string",
-			"defaultValue": "@trigger().scheduledTime"
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		}
 	},
 	"variables": {
@@ -448,13 +448,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/IncrementalLoadSynapse')]",
+			"name": "[concat(parameters('factoryName'), '/IncrementalDataloadIntoSYnapse')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_xx2",
+						"name": "Copy_r95",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -501,193 +501,18 @@
 								"allowCopyCommand": true,
 								"copyCommandSettings": {}
 							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "VendorID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "VendorID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_pickup_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_pickup_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_dropoff_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_dropoff_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "passenger_count",
-											"type": "String"
-										},
-										"sink": {
-											"name": "passenger_count",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "trip_distance",
-											"type": "String"
-										},
-										"sink": {
-											"name": "trip_distance",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "RatecodeID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "RatecodeID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										},
-										"sink": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "PULocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "PULocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "DOLocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "DOLocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "payment_type",
-											"type": "String"
-										},
-										"sink": {
-											"name": "payment_type",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "fare_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "fare_amount",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "extra",
-											"type": "String"
-										},
-										"sink": {
-											"name": "extra",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "mta_tax",
-											"type": "String"
-										},
-										"sink": {
-											"name": "mta_tax",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "tip_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tip_amount",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "tolls_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tolls_amount",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "improvement_surcharge",
-											"type": "String"
-										},
-										"sink": {
-											"name": "improvement_surcharge",
-											"type": "Double"
-										}
-									},
-									{
-										"source": {
-											"name": "total_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "total_amount",
-											"type": "Double"
-										}
-									}
-								]
-							}
+							"enableStaging": false
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceDataset_xx2",
+								"referenceName": "SourceDataset_r95",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_xx2",
+								"referenceName": "DestinationDataset_r95",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -705,8 +530,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_xx2')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_xx2')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_r95')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_r95')]"
 			]
 		},
 		{
@@ -1516,7 +1341,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_xx2')]",
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_r95')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1526,92 +1351,7 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "VendorID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "tpep_pickup_datetime",
-						"type": "datetime2",
-						"scale": 0
-					},
-					{
-						"name": "tpep_dropoff_datetime",
-						"type": "datetime2",
-						"scale": 0
-					},
-					{
-						"name": "passenger_count",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "trip_distance",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "RatecodeID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "store_and_fwd_flag",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PULocationID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "DOLocationID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "payment_type",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "fare_amount",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "extra",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "mta_tax",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "tip_amount",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "tolls_amount",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "improvement_surcharge",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "total_amount",
-						"type": "float",
-						"precision": 15
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "yellow_tripdata"
@@ -1935,7 +1675,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_xx2')]",
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_r95')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1957,76 +1697,7 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": [
-					{
-						"name": "VendorID",
-						"type": "String"
-					},
-					{
-						"name": "tpep_pickup_datetime",
-						"type": "String"
-					},
-					{
-						"name": "tpep_dropoff_datetime",
-						"type": "String"
-					},
-					{
-						"name": "passenger_count",
-						"type": "String"
-					},
-					{
-						"name": "trip_distance",
-						"type": "String"
-					},
-					{
-						"name": "RatecodeID",
-						"type": "String"
-					},
-					{
-						"name": "store_and_fwd_flag",
-						"type": "String"
-					},
-					{
-						"name": "PULocationID",
-						"type": "String"
-					},
-					{
-						"name": "DOLocationID",
-						"type": "String"
-					},
-					{
-						"name": "payment_type",
-						"type": "String"
-					},
-					{
-						"name": "fare_amount",
-						"type": "String"
-					},
-					{
-						"name": "extra",
-						"type": "String"
-					},
-					{
-						"name": "mta_tax",
-						"type": "String"
-					},
-					{
-						"name": "tip_amount",
-						"type": "String"
-					},
-					{
-						"name": "tolls_amount",
-						"type": "String"
-					},
-					{
-						"name": "improvement_surcharge",
-						"type": "String"
-					},
-					{
-						"name": "total_amount",
-						"type": "String"
-					}
-				]
+				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
@@ -2480,74 +2151,43 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Trigger_xx2')]",
+			"name": "[concat(parameters('factoryName'), '/Trigger_r95')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "IncrementalLoadSynapse",
-							"type": "PipelineReference"
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "IncrementalDataloadIntoSYnapse",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"windowStart": {
+							"type": "Expression",
+							"value": "[parameters('Trigger_r95_properties_pipeline_parameters_windowStart')]"
 						},
-						"parameters": {
-							"windowStart": {
-								"type": "Expression",
-								"value": "[parameters('Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowStart')]"
-							},
-							"windowEnd": {
-								"type": "Expression",
-								"value": "[parameters('Trigger_xx2_properties_IncrementalLoadSynapse_parameters_windowEnd')]"
-							}
+						"windowEnd": {
+							"type": "Expression",
+							"value": "[parameters('Trigger_r95_properties_pipeline_parameters_windowEnd')]"
 						}
 					}
-				],
-				"type": "ScheduleTrigger",
+				},
+				"type": "TumblingWindowTrigger",
 				"typeProperties": {
-					"recurrence": {
-						"frequency": "Minute",
-						"interval": 5,
-						"startTime": "2021-02-24T16:04:00Z",
-						"timeZone": "UTC"
-					}
+					"frequency": "Minute",
+					"interval": 5,
+					"startTime": "2021-02-24T16:34:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/IncrementalLoadSynapse')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trigger_stored_proc_latency')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Trigger stored proc to check latency every minute",
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "storedproc",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Minute",
-						"interval": 1,
-						"startTime": "2021-02-05T05:29:00Z",
-						"endTime": "2021-02-06T05:29:00Z",
-						"timeZone": "UTC"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/storedproc')]"
+				"[concat(variables('factoryId'), '/pipelines/IncrementalDataloadIntoSYnapse')]"
 			]
 		},
 		{
