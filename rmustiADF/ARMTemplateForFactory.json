@@ -83,15 +83,15 @@
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder": {
+		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
 			"type": "string",
 			"defaultValue": "@triggerBody().folderName"
 		},
-		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile": {
+		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
-		"triggerYellowTaxi_properties_typeProperties_scope": {
+		"triggerYellowTaxI_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Storage/storageAccounts/mysynapsestorage"
 		}
@@ -2377,7 +2377,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/triggerYellowTaxi')]",
+			"name": "[concat(parameters('factoryName'), '/triggerYellowTaxI')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2390,8 +2390,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"sourceFolder": "[parameters('triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder')]",
-							"sourceFile": "[parameters('triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile')]"
+							"sourceFolder": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder')]",
+							"sourceFile": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile')]"
 						}
 					}
 				],
@@ -2399,7 +2399,7 @@
 				"typeProperties": {
 					"blobPathBeginsWith": "/adftutorial/blobs/yellowtaxi/",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('triggerYellowTaxi_properties_typeProperties_scope')]",
+					"scope": "[parameters('triggerYellowTaxI_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]

@@ -83,15 +83,15 @@
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder": {
+		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
 			"type": "string",
 			"defaultValue": "@triggerBody().folderName"
 		},
-		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile": {
+		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
-		"triggerYellowTaxi_properties_typeProperties_scope": {
+		"triggerYellowTaxI_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Storage/storageAccounts/mysynapsestorage"
 		},
@@ -217,14 +217,14 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder": {
-						"value": "[parameters('triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder')]"
+					"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
+						"value": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder')]"
 					},
-					"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile": {
-						"value": "[parameters('triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile')]"
+					"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
+						"value": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile')]"
 					},
-					"triggerYellowTaxi_properties_typeProperties_scope": {
-						"value": "[parameters('triggerYellowTaxi_properties_typeProperties_scope')]"
+					"triggerYellowTaxI_properties_typeProperties_scope": {
+						"value": "[parameters('triggerYellowTaxI_properties_typeProperties_scope')]"
 					}
 				}
 			},
