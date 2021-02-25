@@ -62,11 +62,14 @@
 		"HttpServer1_properties_typeProperties_url": {
 			"value": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"Trigger_r95_properties_pipeline_parameters_windowStart": {
-			"value": "@trigger().outputs.windowStartTime"
+		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFolder": {
+			"value": "@triggerBody().folderName"
 		},
-		"Trigger_r95_properties_pipeline_parameters_windowEnd": {
-			"value": "@trigger().outputs.windowEndTime"
+		"triggerYellowTaxi_properties_copyEventTrigger_parameters_sourceFile": {
+			"value": "@triggerBody().fileName"
+		},
+		"triggerYellowTaxi_properties_typeProperties_scope": {
+			"value": "/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Storage/storageAccounts/mysynapsestorage"
 		}
 	}
 }
