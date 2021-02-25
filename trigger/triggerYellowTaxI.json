@@ -2,7 +2,7 @@
 	"name": "triggerYellowTaxI",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
