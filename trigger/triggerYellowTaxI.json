@@ -3,18 +3,7 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "copyEventTrigger",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"sourceFolder": "@triggerBody().folderName",
-					"sourceFile": "@triggerBody().fileName"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/adftutorial/blobs/yellowtaxi/",
