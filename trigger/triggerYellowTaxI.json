@@ -1,8 +1,8 @@
 {
-	"name": "triggerYellowTaxi",
+	"name": "triggerYellowTaxI",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
