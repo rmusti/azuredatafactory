@@ -652,6 +652,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "",
+					"firstRowAsHeader": true,
 					"quoteChar": ""
 				},
 				"schema": []
