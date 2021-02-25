@@ -647,7 +647,8 @@
 						"folderPath": {
 							"value": "@dataset().sourceFolder",
 							"type": "Expression"
-						}
+						},
+						"fileSystem": "adftutorial"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "",
