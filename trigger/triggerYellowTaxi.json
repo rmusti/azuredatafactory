@@ -1,0 +1,28 @@
+{
+	"name": "triggerYellowTaxi",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "copyEventTrigger",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sourceFolder": "@triggerBody().folderName",
+					"sourceFile": "@triggerBody().fileName"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/adftutorial/blobs/yellowtaxi/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Storage/storageAccounts/mysynapsestorage",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

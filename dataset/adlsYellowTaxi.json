@@ -1,0 +1,36 @@
+{
+	"name": "adlsYellowTaxi",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"sourceFolder": {
+				"type": "String"
+			},
+			"sourceFile": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().sourceFile",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().sourceFolder",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "",
+			"quoteChar": ""
+		},
+		"schema": []
+	}
+}
