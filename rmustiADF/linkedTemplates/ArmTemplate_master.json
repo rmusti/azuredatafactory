@@ -83,11 +83,11 @@
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
+		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName": {
 			"type": "string",
-			"defaultValue": "@triggerBody().folderName"
+			"defaultValue": "@triggerBody().folderPath"
 		},
-		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
+		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName": {
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
@@ -217,11 +217,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
-						"value": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder')]"
+					"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName": {
+						"value": "[parameters('triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName')]"
 					},
-					"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
-						"value": "[parameters('triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile')]"
+					"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName": {
+						"value": "[parameters('triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName')]"
 					},
 					"triggerYellowTaxI_properties_typeProperties_scope": {
 						"value": "[parameters('triggerYellowTaxI_properties_typeProperties_scope')]"

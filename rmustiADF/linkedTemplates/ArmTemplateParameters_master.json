@@ -62,10 +62,10 @@
 		"HttpServer1_properties_typeProperties_url": {
 			"value": "https://jsonplaceholder.typicode.com/todos/1"
 		},
-		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFolder": {
-			"value": "@triggerBody().folderName"
+		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName": {
+			"value": "@triggerBody().folderPath"
 		},
-		"triggerYellowTaxI_properties_copyEventTrigger_parameters_sourceFile": {
+		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName": {
 			"value": "@triggerBody().fileName"
 		},
 		"triggerYellowTaxI_properties_typeProperties_scope": {
