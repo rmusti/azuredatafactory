@@ -858,14 +858,185 @@
 							},
 							"sink": {
 								"type": "SqlDWSink",
-								"allowPolyBase": true,
-								"polyBaseSettings": {
-									"rejectValue": 0,
-									"rejectType": "value",
-									"useTypeDefault": true
-								}
+								"allowCopyCommand": true,
+								"copyCommandSettings": {}
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "VendorID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VendorID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "tpep_pickup_datetime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tpep_pickup_datetime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "tpep_dropoff_datetime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tpep_dropoff_datetime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "passenger_count",
+											"type": "String"
+										},
+										"sink": {
+											"name": "passenger_count",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "trip_distance",
+											"type": "String"
+										},
+										"sink": {
+											"name": "trip_distance",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "RatecodeID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "RatecodeID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "store_and_fwd_flag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "store_and_fwd_flag",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PULocationID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PULocationID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "DOLocationID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DOLocationID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "payment_type",
+											"type": "String"
+										},
+										"sink": {
+											"name": "payment_type",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "fare_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "fare_amount",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "extra",
+											"type": "String"
+										},
+										"sink": {
+											"name": "extra",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "mta_tax",
+											"type": "String"
+										},
+										"sink": {
+											"name": "mta_tax",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "tip_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tip_amount",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "tolls_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "tolls_amount",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "improvement_surcharge",
+											"type": "String"
+										},
+										"sink": {
+											"name": "improvement_surcharge",
+											"type": "Single"
+										}
+									},
+									{
+										"source": {
+											"name": "total_amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "total_amount",
+											"type": "Single"
+										}
+									}
+								]
+							}
 						},
 						"inputs": [
 							{
@@ -1941,9 +2112,10 @@
 						"fileSystem": "@dataset().sourceFolder"
 					},
 					"columnDelimiter": ",",
-					"escapeChar": "",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
 					"firstRowAsHeader": true,
-					"quoteChar": ""
+					"quoteChar": "\""
 				},
 				"schema": []
 			},
