@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "flightdata.csv",
-				"folderPath": "csv/flight",
+				"folderPath": "csv/Flight",
 				"fileSystem": "sqlondemand1"
 			},
 			"columnDelimiter": ",",
