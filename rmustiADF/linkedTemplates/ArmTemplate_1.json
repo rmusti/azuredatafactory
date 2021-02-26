@@ -644,7 +644,10 @@
 							"value": "@dataset().sourceFile",
 							"type": "Expression"
 						},
-						"fileSystem": "@dataset().sourceFolder"
+						"fileSystem": {
+							"value": "@dataset().sourceFolder",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"rowDelimiter": "\n",

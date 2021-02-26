@@ -82,18 +82,6 @@
 		"HttpServer1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
-		},
-		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName": {
-			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
-		},
-		"triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName": {
-			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
-		},
-		"triggerYellowTaxI_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Storage/storageAccounts/mysynapsestorage"
 		}
 	},
 	"variables": {
@@ -2109,7 +2097,10 @@
 							"value": "@dataset().sourceFile",
 							"type": "Expression"
 						},
-						"fileSystem": "@dataset().sourceFolder"
+						"fileSystem": {
+							"value": "@dataset().sourceFolder",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"rowDelimiter": "\n",
@@ -2439,39 +2430,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/triggerYellowTaxI')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "copyDataEventTrig",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"srcfolderName": "[parameters('triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfolderName')]",
-							"srcfileName": "[parameters('triggerYellowTaxI_properties_copyDataEventTrig_parameters_srcfileName')]"
-						}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/adftutorial/blobs/yellowtaxi/",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('triggerYellowTaxI_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/copyDataEventTrig')]"
-			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AverageDelay')]",
