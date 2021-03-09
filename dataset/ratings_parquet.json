@@ -1,0 +1,38 @@
+{
+	"name": "ratings_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ratings.parquet",
+				"folderPath": "parquet/movies",
+				"fileSystem": "sqlondemand1"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "userId",
+				"type": "INT32"
+			},
+			{
+				"name": "movieId",
+				"type": "INT32"
+			},
+			{
+				"name": "rating",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "timestamp",
+				"type": "INT32"
+			}
+		]
+	}
+}
