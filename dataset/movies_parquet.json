@@ -1,0 +1,34 @@
+{
+	"name": "movies_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "movies1.parquet",
+				"folderPath": "parquet/movies",
+				"fileSystem": "sqlondemand1"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "movieId",
+				"type": "INT32"
+			},
+			{
+				"name": "title",
+				"type": "UTF8"
+			},
+			{
+				"name": "genres",
+				"type": "UTF8"
+			}
+		]
+	}
+}
