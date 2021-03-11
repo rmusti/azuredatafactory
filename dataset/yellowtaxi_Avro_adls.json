@@ -12,9 +12,7 @@
 				"type": "AzureBlobFSLocation",
 				"folderPath": "avro",
 				"fileSystem": "sqlondemand1"
-			},
-			"avroCompressionCodec": "deflate",
-			"avroCompressionLevel": 1
+			}
 		},
 		"schema": {
 			"type": "record",
