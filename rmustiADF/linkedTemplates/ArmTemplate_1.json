@@ -79,7 +79,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "flightdata.csv",
-						"folderPath": "csv/flight",
+						"folderPath": "csv/Flight",
 						"fileSystem": "sqlondemand1"
 					},
 					"columnDelimiter": ",",
@@ -660,6 +660,84 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/movies_parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "movies1.parquet",
+						"folderPath": "parquet/movies",
+						"fileSystem": "sqlondemand1"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "movieId",
+						"type": "INT32"
+					},
+					{
+						"name": "title",
+						"type": "UTF8"
+					},
+					{
+						"name": "genres",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ratings_parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ratings.parquet",
+						"folderPath": "parquet/movies",
+						"fileSystem": "sqlondemand1"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "userId",
+						"type": "INT32"
+					},
+					{
+						"name": "movieId",
+						"type": "INT32"
+					},
+					{
+						"name": "rating",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "timestamp",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/synYellowTaxi')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -764,6 +842,31 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/user_ratings_movies')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "parquet/movies/output",
+						"fileSystem": "sqlondemand1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/yellotaxi2')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -787,777 +890,124 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/yellowtaxi_csv_adls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "ADX Load App Tables",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "ADX Load Master Table",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": {
-								"value": ".set-or-append OOCLAppData <|\n    OOCLMasterData\n    | extend payloadstr = parse_json(mest_payloadInStr)\n    | extend payload_Key = payloadstr.key , eecEventHistInfo_eventUuid  = payloadstr.eecEventHistInfo.eventUuid , eecEventHistInfo_eventDateTimeGmt =payloadstr.eecEventHistInfo.eventDateTimeGmt \n    | project mest_application, mest_destination,mest_senderTimestamp,payload_Key , eecEventHistInfo_eventUuid ,eecEventHistInfo_eventDateTimeGmt\n    | where cursor_after( \"@{activity('Lookup1').output.firstRow.print_0}\")",
-								"type": "Expression"
-							},
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "ADX Load Master Table",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": ".ingest into table OOCLMasterData (h'https://mysynapsestorage.blob.core.windows.net/sqlondemand1/json/sample_data.json?sp=r&st=2020-09-10T07:20:12Z&se=2020-09-30T15:20:12Z&spr=https&sv=2019-12-12&sr=b&sig=9lvMwuyvEr%2F4tVDIMFHehVyG8IiMGAZqjXU3OG0X2fU%3D') with '{\"format\":\"multijson\", \"ingestionMappingReference\":\"OOCLMasterData_mapping\"}'",
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureDataExplorerSource",
-								"query": "print cursor_current()",
-								"queryTimeout": "00:10:00"
-							},
-							"dataset": {
-								"referenceName": "AzureDataExplorerTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables_seqnum')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "ADX Load TestAppTable",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": {
-								"value": ".set-or-append TestAppData <|\n    TestTable2\n    | where EventSequenceNumber > toint(\"@{activity('Lookup1').output.firstRow.EventSequenceNumber}\")\n    | project EventSequenceNumber , Metric , Value",
-								"type": "Expression"
-							},
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureDataExplorerSource",
-								"query": "TestAppData\n| top 1 by EventSequenceNumber desc \n| project EventSequenceNumber",
-								"queryTimeout": "00:10:00"
-							},
-							"dataset": {
-								"referenceName": "AzureDataExplorerTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/IncrementalCopyPipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "LookupOldWaterMarkActivity",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "WatermarkDataset",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "LookupNewWaterMarkActivity",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select MAX(LastModifytime) as NewWatermarkvalue from data_source_table",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "AzureSqlTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": true
-						}
-					},
-					{
-						"name": "IncrementalCopyActivity",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "LookupOldWaterMarkActivity",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "LookupNewWaterMarkActivity",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": {
-									"value": "select * from data_source_table where LastModifytime > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
-									"type": "Expression"
-								},
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "AzureSqlTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "SinkDataset",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "StoredProceduretoWriteWatermarkActivity",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "IncrementalCopyActivity",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[usp_write_watermark]",
-							"storedProcedureParameters": {
-								"LastModifiedtime": {
-									"value": {
-										"value": "@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}",
-										"type": "Expression"
-									},
-									"type": "Datetime"
-								},
-								"TableName": {
-									"value": {
-										"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableName}",
-										"type": "Expression"
-									},
-									"type": "String"
-								}
-							}
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureSqlDatabaseLinkedService",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
-				"lastPublishTime": "2020-08-15T15:27:55Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/WatermarkDataset')]",
-				"[concat(variables('factoryId'), '/datasets/SinkDataset')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LoadSQLDBtoSynapseDemo')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "ForEach_93w",
-						"type": "ForEach",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@pipeline().parameters.cw_items",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Copy_93w",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [
-										{
-											"name": "Source",
-											"value": "SalesLT.@{item().source.table}"
-										},
-										{
-											"name": "Destination",
-											"value": "SalesLT.@{item().destination.table}"
-										}
-									],
-									"typeProperties": {
-										"source": {
-											"type": "AzureSqlSource",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "SqlDWSink",
-											"allowPolyBase": true,
-											"polyBaseSettings": {
-												"rejectValue": 0,
-												"rejectType": "value",
-												"useTypeDefault": true
-											},
-											"tableOption": "autoCreate"
-										},
-										"enableStaging": true,
-										"stagingSettings": {
-											"linkedServiceName": {
-												"referenceName": "AzureBlobStorageTempSynapse",
-												"type": "LinkedServiceReference"
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "SourceDataset_93w",
-											"type": "DatasetReference",
-											"parameters": {
-												"cw_table": "@item().source.table"
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DestinationDataset_93w",
-											"type": "DatasetReference",
-											"parameters": {
-												"cw_table": "@item().destination.table"
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"parameters": {
-					"cw_items": {
-						"type": "Array",
-						"defaultValue": [
-							{
-								"source": {
-									"table": "Address"
-								},
-								"destination": {
-									"table": "Address"
-								}
-							},
-							{
-								"source": {
-									"table": "Customer"
-								},
-								"destination": {
-									"table": "Customer"
-								}
-							},
-							{
-								"source": {
-									"table": "CustomerAddress"
-								},
-								"destination": {
-									"table": "CustomerAddress"
-								}
-							},
-							{
-								"source": {
-									"table": "Product"
-								},
-								"destination": {
-									"table": "Product"
-								}
-							},
-							{
-								"source": {
-									"table": "ProductCategory"
-								},
-								"destination": {
-									"table": "ProductCategory"
-								}
-							},
-							{
-								"source": {
-									"table": "ProductDescription"
-								},
-								"destination": {
-									"table": "ProductDescription"
-								}
-							},
-							{
-								"source": {
-									"table": "ProductModel"
-								},
-								"destination": {
-									"table": "ProductModel"
-								}
-							},
-							{
-								"source": {
-									"table": "ProductModelProductDescription"
-								},
-								"destination": {
-									"table": "ProductModelProductDescription"
-								}
-							},
-							{
-								"source": {
-									"table": "SalesOrderDetail"
-								},
-								"destination": {
-									"table": "SalesOrderDetail"
-								}
-							},
-							{
-								"source": {
-									"table": "SalesOrderHeader"
-								},
-								"destination": {
-									"table": "SalesOrderHeader"
-								}
-							}
-						]
-					}
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "yellow_tripdata_2017-01.csv",
+						"folderPath": "csv/taxi",
+						"fileSystem": "sqlondemand1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
 				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_93w')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_93w')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/copyDataEventTrig')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
+				"schema": [
 					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowCopyCommand": true,
-								"copyCommandSettings": {}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "VendorID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "VendorID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_pickup_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_pickup_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_dropoff_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_dropoff_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "passenger_count",
-											"type": "String"
-										},
-										"sink": {
-											"name": "passenger_count",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "trip_distance",
-											"type": "String"
-										},
-										"sink": {
-											"name": "trip_distance",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "RatecodeID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "RatecodeID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										},
-										"sink": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "PULocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "PULocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "DOLocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "DOLocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "payment_type",
-											"type": "String"
-										},
-										"sink": {
-											"name": "payment_type",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "fare_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "fare_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "extra",
-											"type": "String"
-										},
-										"sink": {
-											"name": "extra",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "mta_tax",
-											"type": "String"
-										},
-										"sink": {
-											"name": "mta_tax",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "tip_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tip_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "tolls_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tolls_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "improvement_surcharge",
-											"type": "String"
-										},
-										"sink": {
-											"name": "improvement_surcharge",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "total_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "total_amount",
-											"type": "Single"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "adlsYellowTaxi",
-								"type": "DatasetReference",
-								"parameters": {
-									"sourceFolder": {
-										"value": "@pipeline().parameters.srcfolderName",
-										"type": "Expression"
-									},
-									"sourceFile": {
-										"value": "@pipeline().parameters.srcfileName",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "synYellowTaxi",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"parameters": {
-					"srcfolderName": {
+						"name": "VendorID",
 						"type": "String"
 					},
-					"srcfileName": {
+					{
+						"name": "tpep_pickup_datetime",
+						"type": "String"
+					},
+					{
+						"name": "tpep_dropoff_datetime",
+						"type": "String"
+					},
+					{
+						"name": "passenger_count",
+						"type": "String"
+					},
+					{
+						"name": "trip_distance",
+						"type": "String"
+					},
+					{
+						"name": "RatecodeID",
+						"type": "String"
+					},
+					{
+						"name": "store_and_fwd_flag",
+						"type": "String"
+					},
+					{
+						"name": "PULocationID",
+						"type": "String"
+					},
+					{
+						"name": "DOLocationID",
+						"type": "String"
+					},
+					{
+						"name": "payment_type",
+						"type": "String"
+					},
+					{
+						"name": "fare_amount",
+						"type": "String"
+					},
+					{
+						"name": "extra",
+						"type": "String"
+					},
+					{
+						"name": "mta_tax",
+						"type": "String"
+					},
+					{
+						"name": "tip_amount",
+						"type": "String"
+					},
+					{
+						"name": "tolls_amount",
+						"type": "String"
+					},
+					{
+						"name": "improvement_surcharge",
+						"type": "String"
+					},
+					{
+						"name": "total_amount",
 						"type": "String"
 					}
-				},
-				"annotations": []
+				]
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/adlsYellowTaxi')]",
-				"[concat(variables('factoryId'), '/datasets/synYellowTaxi')]"
-			]
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/yellowtaxi_ORC_adls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Orc",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "ORC",
+						"fileSystem": "sqlondemand1"
+					},
+					"orcCompressionCodec": "zlib",
+					"enablePhysicalSchema": true
+				},
+				"schema": []
+			},
+			"dependsOn": []
 		}
 	]
 }
