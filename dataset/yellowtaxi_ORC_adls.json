@@ -1,0 +1,21 @@
+{
+	"name": "yellowtaxi_ORC_adls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Orc",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "ORC",
+				"fileSystem": "sqlondemand1"
+			},
+			"orcCompressionCodec": "zlib",
+			"enablePhysicalSchema": true
+		},
+		"schema": []
+	}
+}
