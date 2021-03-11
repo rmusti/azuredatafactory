@@ -1,0 +1,70 @@
+{
+	"name": "yellowtaxi_Avro_adls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "avro",
+				"fileSystem": "sqlondemand1"
+			},
+			"avroCompressionCodec": "deflate",
+			"avroCompressionLevel": 1
+		},
+		"schema": {
+			"type": "record",
+			"name": "Microsoft.ServiceBus.Messaging.EventData",
+			"fields": [
+				{
+					"name": "SequenceNumber",
+					"type": "long"
+				},
+				{
+					"name": "Offset",
+					"type": "string"
+				},
+				{
+					"name": "EnqueuedTimeUtc",
+					"type": "string"
+				},
+				{
+					"name": "SystemProperties",
+					"type": {
+						"type": "map",
+						"values": [
+							"long",
+							"double",
+							"string",
+							"bytes"
+						]
+					}
+				},
+				{
+					"name": "Properties",
+					"type": {
+						"type": "map",
+						"values": [
+							"long",
+							"double",
+							"string",
+							"bytes",
+							"null"
+						]
+					}
+				},
+				{
+					"name": "Body",
+					"type": [
+						"null",
+						"bytes"
+					]
+				}
+			]
+		}
+	}
+}
