@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "\nSELECT * FROM watermarktable\nWHERE TableName = '[SalesLT].[SalesOrderDetail]'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
