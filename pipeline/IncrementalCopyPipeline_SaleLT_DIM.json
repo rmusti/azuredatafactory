@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "\nSELECT * FROM watermarktable\nWHERE TableName = '[SalesLT].[SalesOrderDetail]'",
+						"sqlReaderQuery": "\nSELECT * FROM watermarktable\nWHERE TableName = '[SalesLT].[Customer]'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -42,7 +42,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select MAX(SalesLT.SalesOrderDetail.ModifiedDate) as NewWatermarkvalue from SalesLT.SalesOrderDetail",
+						"sqlReaderQuery": "select MAX(SalesLT.Customer.ModifiedDate) as NewWatermarkvalue from SalesLT.Customer",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -117,7 +117,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SinkDataset",
+						"referenceName": "SalesLTCustomer",
 						"type": "DatasetReference"
 					}
 				]
