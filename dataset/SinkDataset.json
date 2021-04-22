@@ -15,10 +15,10 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "SourceTable/@concat('Month-',string(dayOfMonth(utcnow())))",
+					"value": "@concat('Month-',string(dayOfMonth(utcnow())))",
 					"type": "Expression"
 				},
-				"fileSystem": "adftutorial"
+				"fileSystem": "adftutorial/IncrementalCopy"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
