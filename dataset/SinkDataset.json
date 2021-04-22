@@ -15,7 +15,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@concat('Month-',string(dayOfMonth(utcnow())))",
+					"value": "SourceTable/@concat('Month-',string(dayOfMonth(utcnow())))",
 					"type": "Expression"
 				},
 				"fileSystem": "adftutorial"
