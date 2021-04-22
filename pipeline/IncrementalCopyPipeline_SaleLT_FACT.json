@@ -1,5 +1,5 @@
 {
-	"name": "IncrementalCopyPipeline_SaleLT",
+	"name": "IncrementalCopyPipeline_SaleLT_FACT",
 	"properties": {
 		"activities": [
 			{
