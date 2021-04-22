@@ -11,10 +11,13 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@CONCAT('Incremental-', pipeline().RunId, '.txt')",
+					"value": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
 					"type": "Expression"
 				},
-				"folderPath": "incrementalcopy",
+				"folderPath": {
+					"value": "@concat('Month-',string(dayOfMonth(utcnow())))",
+					"type": "Expression"
+				},
 				"fileSystem": "adftutorial"
 			},
 			"columnDelimiter": ",",
