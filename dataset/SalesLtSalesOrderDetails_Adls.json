@@ -14,8 +14,8 @@
 				"fileSystem": "adftutorial"
 			},
 			"columnDelimiter": ",",
-			"escapeChar": "\"",
-			"quoteChar": "\""
+			"escapeChar": "",
+			"quoteChar": ""
 		},
 		"schema": [
 			{
