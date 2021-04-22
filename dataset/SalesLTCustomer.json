@@ -1,0 +1,23 @@
+{
+	"name": "SalesLTCustomer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
+				"folderPath": "IncrementalCopy/DIM_Customer",
+				"fileSystem": "adftutorial"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
