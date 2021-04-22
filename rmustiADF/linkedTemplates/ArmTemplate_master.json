@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rmustiADF"
 		},
-		"AzureBlobStorageTempSynapse_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageTempSynapse'"
-		},
 		"AzureDataExplorer1_servicePrincipalKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataExplorer1'"
@@ -18,18 +14,6 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
-		},
-		"AzureDataLakeStoragedhl_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStoragedhl'"
-		},
-		"AzureSqlDatabaseLinkedService_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedService'"
-		},
-		"AzureSqlDbWWI_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDbWWI'"
 		},
 		"AzureSynapseAnalytics1_connectionString": {
 			"type": "secureString",
@@ -75,10 +59,6 @@
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
 		},
-		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
-		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -106,23 +86,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureBlobStorageTempSynapse_connectionString": {
-						"value": "[parameters('AzureBlobStorageTempSynapse_connectionString')]"
-					},
 					"AzureDataExplorer1_servicePrincipalKey": {
 						"value": "[parameters('AzureDataExplorer1_servicePrincipalKey')]"
 					},
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
-					},
-					"AzureDataLakeStoragedhl_accountKey": {
-						"value": "[parameters('AzureDataLakeStoragedhl_accountKey')]"
-					},
-					"AzureSqlDatabaseLinkedService_connectionString": {
-						"value": "[parameters('AzureSqlDatabaseLinkedService_connectionString')]"
-					},
-					"AzureSqlDbWWI_connectionString": {
-						"value": "[parameters('AzureSqlDbWWI_connectionString')]"
 					},
 					"AzureSynapseAnalytics1_connectionString": {
 						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
@@ -156,9 +124,6 @@
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
-					},
-					"AzureDataLakeStoragedhl_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStoragedhl_properties_typeProperties_url')]"
 					}
 				}
 			},

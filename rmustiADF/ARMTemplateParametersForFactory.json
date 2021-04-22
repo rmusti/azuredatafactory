@@ -5,22 +5,10 @@
 		"factoryName": {
 			"value": "rmustiADF"
 		},
-		"AzureBlobStorageTempSynapse_connectionString": {
-			"value": ""
-		},
 		"AzureDataExplorer1_servicePrincipalKey": {
 			"value": ""
 		},
 		"AzureDataLakeStorage1_accountKey": {
-			"value": ""
-		},
-		"AzureDataLakeStoragedhl_accountKey": {
-			"value": ""
-		},
-		"AzureSqlDatabaseLinkedService_connectionString": {
-			"value": ""
-		},
-		"AzureSqlDbWWI_connectionString": {
 			"value": ""
 		},
 		"AzureSynapseAnalytics1_connectionString": {
@@ -55,9 +43,6 @@
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
-		},
-		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
-			"value": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
 		}
 	}
 }
