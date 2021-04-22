@@ -17,9 +17,6 @@
 		"AzureDataLakeStoragedhl_accountKey": {
 			"value": ""
 		},
-		"AzureSqlDatabase1_connectionString": {
-			"value": ""
-		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"value": ""
 		},
@@ -41,6 +38,9 @@
 		"dhlpocsynapse_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+			"value": ""
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"value": "https://rmustiadxcluster.eastus.kusto.windows.net"
 		},
@@ -58,9 +58,6 @@
 		},
 		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
 			"value": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
-		},
-		"HttpServer1_properties_typeProperties_url": {
-			"value": "https://jsonplaceholder.typicode.com/todos/1"
 		},
 		"containerUri": {
 			"value": ""

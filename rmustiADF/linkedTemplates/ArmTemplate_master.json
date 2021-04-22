@@ -23,10 +23,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStoragedhl'"
 		},
-		"AzureSqlDatabase1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
-		},
 		"AzureSqlDatabaseLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedService'"
@@ -55,6 +51,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dhlpocsynapse'"
 		},
+		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDb_serverless_rmusti_SalesLT_Eastus'"
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
@@ -78,10 +78,6 @@
 		"AzureDataLakeStoragedhl_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlspoceuwest07pldnsazr.dfs.core.windows.net"
-		},
-		"HttpServer1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://jsonplaceholder.typicode.com/todos/1"
 		},
 		"containerUri": {
 			"type": "string",
@@ -122,9 +118,6 @@
 					"AzureDataLakeStoragedhl_accountKey": {
 						"value": "[parameters('AzureDataLakeStoragedhl_accountKey')]"
 					},
-					"AzureSqlDatabase1_connectionString": {
-						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
-					},
 					"AzureSqlDatabaseLinkedService_connectionString": {
 						"value": "[parameters('AzureSqlDatabaseLinkedService_connectionString')]"
 					},
@@ -146,6 +139,9 @@
 					"dhlpocsynapse_connectionString": {
 						"value": "[parameters('dhlpocsynapse_connectionString')]"
 					},
+					"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+						"value": "[parameters('AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString')]"
+					},
 					"AzureDataExplorer1_properties_typeProperties_endpoint": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_endpoint')]"
 					},
@@ -163,9 +159,6 @@
 					},
 					"AzureDataLakeStoragedhl_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStoragedhl_properties_typeProperties_url')]"
-					},
-					"HttpServer1_properties_typeProperties_url": {
-						"value": "[parameters('HttpServer1_properties_typeProperties_url')]"
 					}
 				}
 			},
