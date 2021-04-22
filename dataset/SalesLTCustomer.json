@@ -15,7 +15,8 @@
 				"fileSystem": "adftutorial"
 			},
 			"columnDelimiter": ",",
-			"escapeChar": "\\",
+			"rowDelimiter": "\n",
+			"escapeChar": "\"",
 			"quoteChar": "\""
 		},
 		"schema": []
