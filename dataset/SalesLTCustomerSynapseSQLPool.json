@@ -1,0 +1,81 @@
+{
+	"name": "SalesLTCustomerSynapseSQLPool",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "CustomerID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NameStyle",
+				"type": "varchar"
+			},
+			{
+				"name": "Title",
+				"type": "varchar"
+			},
+			{
+				"name": "FirstName",
+				"type": "varchar"
+			},
+			{
+				"name": "MiddleName",
+				"type": "varchar"
+			},
+			{
+				"name": "LastName",
+				"type": "varchar"
+			},
+			{
+				"name": "Suffix",
+				"type": "varchar"
+			},
+			{
+				"name": "CompanyName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SalesPerson",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EmailAddress",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Phone",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "PasswordHash",
+				"type": "varchar"
+			},
+			{
+				"name": "PasswordSalt",
+				"type": "varchar"
+			},
+			{
+				"name": "rowguid",
+				"type": "varchar"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "DIM_Customer_Staging"
+		}
+	}
+}

@@ -82,7 +82,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from [SalesLT].[SalesOrderDetail] where ModifiedDate > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and ModifiedDate  <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
+							"value": "select * from SalesLT.Customer where ModifiedDate > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and ModifiedDate  <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -206,13 +206,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SalesLtSalesOrderDetails_Adls",
+						"referenceName": "SalesLTCustomer",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "SalesLTSalesOrderDetailSynapseSQLPool",
+						"referenceName": "SalesLTCustomerSynapseSQLPool",
 						"type": "DatasetReference"
 					}
 				]
@@ -238,7 +238,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "SalesLtSalesOrderDetails_Adls",
+						"referenceName": "SalesLTCustomer",
 						"type": "DatasetReference"
 					},
 					"enableLogging": false,
