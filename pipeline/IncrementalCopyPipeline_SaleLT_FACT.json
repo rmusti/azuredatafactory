@@ -206,7 +206,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SalesLtSalesOrderDetails_Adls",
+						"referenceName": "SinkDataset",
 						"type": "DatasetReference"
 					}
 				],
