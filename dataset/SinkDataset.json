@@ -18,7 +18,8 @@
 				"fileSystem": "adftutorial/IncrementalCopy"
 			},
 			"columnDelimiter": ",",
-			"escapeChar": "\\",
+			"rowDelimiter": "\n",
+			"escapeChar": "\"",
 			"quoteChar": "\""
 		},
 		"schema": []
