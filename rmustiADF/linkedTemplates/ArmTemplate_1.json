@@ -662,6 +662,117 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SalesLTCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
+						"folderPath": "IncrementalCopy/DIM_Customer",
+						"fileSystem": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SalesLTCustomerSynapseSQLPool')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NameStyle",
+						"type": "varchar"
+					},
+					{
+						"name": "Title",
+						"type": "varchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "varchar"
+					},
+					{
+						"name": "MiddleName",
+						"type": "varchar"
+					},
+					{
+						"name": "LastName",
+						"type": "varchar"
+					},
+					{
+						"name": "Suffix",
+						"type": "varchar"
+					},
+					{
+						"name": "CompanyName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SalesPerson",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Phone",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "PasswordHash",
+						"type": "varchar"
+					},
+					{
+						"name": "PasswordSalt",
+						"type": "varchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "varchar"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "DIM_Customer_Staging"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1147,296 +1258,6 @@
 				"[concat(variables('factoryId'), '/datasets/WatermarkDataset')]",
 				"[concat(variables('factoryId'), '/datasets/SqlDbDataSourceIncrementalCopy')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/copyDataEventTrig')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowCopyCommand": true,
-								"copyCommandSettings": {}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "VendorID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "VendorID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_pickup_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_pickup_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "tpep_dropoff_datetime",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tpep_dropoff_datetime",
-											"type": "DateTime"
-										}
-									},
-									{
-										"source": {
-											"name": "passenger_count",
-											"type": "String"
-										},
-										"sink": {
-											"name": "passenger_count",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "trip_distance",
-											"type": "String"
-										},
-										"sink": {
-											"name": "trip_distance",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "RatecodeID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "RatecodeID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										},
-										"sink": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "PULocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "PULocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "DOLocationID",
-											"type": "String"
-										},
-										"sink": {
-											"name": "DOLocationID",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "payment_type",
-											"type": "String"
-										},
-										"sink": {
-											"name": "payment_type",
-											"type": "Int64"
-										}
-									},
-									{
-										"source": {
-											"name": "fare_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "fare_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "extra",
-											"type": "String"
-										},
-										"sink": {
-											"name": "extra",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "mta_tax",
-											"type": "String"
-										},
-										"sink": {
-											"name": "mta_tax",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "tip_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tip_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "tolls_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "tolls_amount",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "improvement_surcharge",
-											"type": "String"
-										},
-										"sink": {
-											"name": "improvement_surcharge",
-											"type": "Single"
-										}
-									},
-									{
-										"source": {
-											"name": "total_amount",
-											"type": "String"
-										},
-										"sink": {
-											"name": "total_amount",
-											"type": "Single"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "adlsYellowTaxi",
-								"type": "DatasetReference",
-								"parameters": {
-									"sourceFolder": {
-										"value": "@pipeline().parameters.srcfolderName",
-										"type": "Expression"
-									},
-									"sourceFile": {
-										"value": "@pipeline().parameters.srcfileName",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "synYellowTaxi",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"parameters": {
-					"srcfolderName": {
-						"type": "String"
-					},
-					"srcfileName": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/adlsYellowTaxi')]",
-				"[concat(variables('factoryId'), '/datasets/synYellowTaxi')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AverageDelay')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "FlightData",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "AvgFlightDelay",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "AverageWeatherDelay"
-						},
-						{
-							"name": "filterwetherdelay"
-						}
-					],
-					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
