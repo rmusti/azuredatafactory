@@ -238,7 +238,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "SalesLtSalesOrderDetails_Adls",
+						"referenceName": "SinkDataset",
 						"type": "DatasetReference"
 					},
 					"enableLogging": false,
