@@ -1343,14 +1343,12 @@
 							"value": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
 							"type": "Expression"
 						},
-						"folderPath": {
-							"value": "@concat('Month-',string(dayOfMonth(utcnow())))",
-							"type": "Expression"
-						},
+						"folderPath": "FACT_SalesOrder",
 						"fileSystem": "adftutorial/IncrementalCopy"
 					},
 					"columnDelimiter": ",",
-					"escapeChar": "\\",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
 					"quoteChar": "\""
 				},
 				"schema": []
@@ -2493,7 +2491,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SalesLtSalesOrderDetails_Adls",
+								"referenceName": "SinkDataset",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -2527,7 +2525,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "SalesLtSalesOrderDetails_Adls",
+								"referenceName": "SinkDataset",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -2548,7 +2546,6 @@
 				"[concat(variables('factoryId'), '/datasets/SqlDbDataSourceIncrementalCopy')]",
 				"[concat(variables('factoryId'), '/datasets/SinkDataset')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDb_serverless_rmusti_SalesLT_Eastus')]",
-				"[concat(variables('factoryId'), '/datasets/SalesLtSalesOrderDetails_Adls')]",
 				"[concat(variables('factoryId'), '/datasets/SalesLTSalesOrderDetailSynapseSQLPool')]"
 			]
 		},

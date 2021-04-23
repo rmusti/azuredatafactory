@@ -552,7 +552,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SalesLtSalesOrderDetails_Adls",
+								"referenceName": "SinkDataset",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -586,7 +586,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "SalesLtSalesOrderDetails_Adls",
+								"referenceName": "SinkDataset",
 								"type": "DatasetReference",
 								"parameters": {}
 							},

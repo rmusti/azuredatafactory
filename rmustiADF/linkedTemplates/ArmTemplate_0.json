@@ -623,14 +623,12 @@
 							"value": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
 							"type": "Expression"
 						},
-						"folderPath": {
-							"value": "@concat('Month-',string(dayOfMonth(utcnow())))",
-							"type": "Expression"
-						},
+						"folderPath": "FACT_SalesOrder",
 						"fileSystem": "adftutorial/IncrementalCopy"
 					},
 					"columnDelimiter": ",",
-					"escapeChar": "\\",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
 					"quoteChar": "\""
 				},
 				"schema": []
