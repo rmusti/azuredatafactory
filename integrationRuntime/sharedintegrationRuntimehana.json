@@ -1,0 +1,12 @@
+{
+	"name": "sharedintegrationRuntimehana",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}
