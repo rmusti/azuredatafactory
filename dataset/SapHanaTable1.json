@@ -1,0 +1,12 @@
+{
+	"name": "SapHanaTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SapHanaLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SapHanaTable",
+		"schema": []
+	}
+}
