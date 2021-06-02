@@ -11,10 +11,16 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+			"value": ""
+		},
 		"AzureSynapseAnalytics1_connectionString": {
 			"value": ""
 		},
 		"AzureSynapseAnalytics2_connectionString": {
+			"value": ""
+		},
+		"SapHanaLinkedService_connectionString": {
 			"value": ""
 		},
 		"SqlDbAdventureWorks_connectionString": {
@@ -26,7 +32,7 @@
 		"dhlpocsynapse_connectionString": {
 			"value": ""
 		},
-		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+		"AzureDatabricks1_accessToken": {
 			"value": ""
 		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
@@ -43,6 +49,9 @@
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
 		},
 		"containerUri": {
 			"value": ""

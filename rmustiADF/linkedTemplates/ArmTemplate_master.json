@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDb_serverless_rmusti_SalesLT_Eastus'"
+		},
 		"AzureSynapseAnalytics1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
@@ -22,6 +26,10 @@
 		"AzureSynapseAnalytics2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
+		},
+		"SapHanaLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SapHanaLinkedService'"
 		},
 		"SqlDbAdventureWorks_connectionString": {
 			"type": "secureString",
@@ -35,9 +43,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dhlpocsynapse'"
 		},
-		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+		"AzureDatabricks1_accessToken": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSqlDb_serverless_rmusti_SalesLT_Eastus'"
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
 		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
@@ -58,6 +66,10 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
+		},
+		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
 		},
 		"containerUri": {
 			"type": "string",
@@ -92,6 +104,9 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
+						"value": "[parameters('AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString')]"
+					},
 					"AzureSynapseAnalytics1_connectionString": {
 						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
 					},
@@ -107,8 +122,8 @@
 					"dhlpocsynapse_connectionString": {
 						"value": "[parameters('dhlpocsynapse_connectionString')]"
 					},
-					"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
-						"value": "[parameters('AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString')]"
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
 					},
 					"AzureDataExplorer1_properties_typeProperties_endpoint": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_endpoint')]"
@@ -124,6 +139,9 @@
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+						"value": "[parameters('sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId')]"
 					}
 				}
 			},
@@ -142,6 +160,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"SapHanaLinkedService_connectionString": {
+						"value": "[parameters('SapHanaLinkedService_connectionString')]"
 					}
 				}
 			},
