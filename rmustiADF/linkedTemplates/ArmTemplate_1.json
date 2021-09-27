@@ -10,12 +10,132 @@
 		"SapHanaLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SapHanaLinkedService'"
+		},
+		"hdinsightsparkondemand_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "f2e468ef-7cf1-411c-bef2-98509a126497"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "HDInsightLearning"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "2356dc76-ce1a-468b-b11b-edf2cbebac15"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
+			"type": "string",
+			"defaultValue": "sshuser"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/SalesLTCustomerSynapseSQLPool')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NameStyle",
+						"type": "varchar"
+					},
+					{
+						"name": "Title",
+						"type": "varchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "varchar"
+					},
+					{
+						"name": "MiddleName",
+						"type": "varchar"
+					},
+					{
+						"name": "LastName",
+						"type": "varchar"
+					},
+					{
+						"name": "Suffix",
+						"type": "varchar"
+					},
+					{
+						"name": "CompanyName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "SalesPerson",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EmailAddress",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Phone",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "PasswordHash",
+						"type": "varchar"
+					},
+					{
+						"name": "PasswordSalt",
+						"type": "varchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "varchar"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "SalesLT",
+					"table": "DIM_Customer_Staging"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SalesLTSalesOrderDetailSynapseSQLPool')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -880,164 +1000,46 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/hdinsightsparkondemand')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "ADX Load App Tables",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "ADX Load Master Table",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": {
-								"value": ".set-or-append OOCLAppData <|\n    OOCLMasterData\n    | extend payloadstr = parse_json(mest_payloadInStr)\n    | extend payload_Key = payloadstr.key , eecEventHistInfo_eventUuid  = payloadstr.eecEventHistInfo.eventUuid , eecEventHistInfo_eventDateTimeGmt =payloadstr.eecEventHistInfo.eventDateTimeGmt \n    | project mest_application, mest_destination,mest_senderTimestamp,payload_Key , eecEventHistInfo_eventUuid ,eecEventHistInfo_eventDateTimeGmt\n    | where cursor_after( \"@{activity('Lookup1').output.firstRow.print_0}\")",
-								"type": "Expression"
-							},
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "spark",
+					"clusterSize": 2,
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('hdinsightsparkondemand_properties_typeProperties_servicePrincipalId')]",
+					"osType": "Linux",
+					"tenant": "[parameters('hdinsightsparkondemand_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "rm",
+					"clusterUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterUserName')]",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterPassword')]"
 					},
-					{
-						"name": "ADX Load Master Table",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": ".ingest into table OOCLMasterData (h'https://mysynapsestorage.blob.core.windows.net/sqlondemand1/json/sample_data.json?sp=r&st=2020-09-10T07:20:12Z&se=2020-09-30T15:20:12Z&spr=https&sv=2019-12-12&sr=b&sig=9lvMwuyvEr%2F4tVDIMFHehVyG8IiMGAZqjXU3OG0X2fU%3D') with '{\"format\":\"multijson\", \"ingestionMappingReference\":\"OOCLMasterData_mapping\"}'",
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
+					"clusterSshUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]",
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterSshPassword')]"
 					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureDataExplorerSource",
-								"query": "print cursor_current()",
-								"queryTimeout": "00:10:00"
-							},
-							"dataset": {
-								"referenceName": "AzureDataExplorerTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables_seqnum')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "ADX Load TestAppTable",
-						"type": "AzureDataExplorerCommand",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"command": {
-								"value": ".set-or-append TestAppData <|\n    TestTable2\n    | where EventSequenceNumber > toint(\"@{activity('Lookup1').output.firstRow.EventSequenceNumber}\")\n    | project EventSequenceNumber , Metric , Value",
-								"type": "Expression"
-							},
-							"commandTimeout": "00:20:00"
-						},
-						"linkedServiceName": {
-							"referenceName": "AzureDataExplorer1",
-							"type": "LinkedServiceReference"
-						}
+					"sparkVersion": "",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_servicePrincipalKey')]"
 					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureDataExplorerSource",
-								"query": "TestAppData\n| top 1 by EventSequenceNumber desc \n| project EventSequenceNumber",
-								"queryTimeout": "00:10:00"
-							},
-							"dataset": {
-								"referenceName": "AzureDataExplorerTable1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"annotations": []
+					"linkedServiceName": {
+						"referenceName": "hdinsightadfblobrmusti",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": ""
+				}
 			},
 			"dependsOn": []
 		}

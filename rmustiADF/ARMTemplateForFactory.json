@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
 		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDb_serverless_rmusti_SalesLT_Eastus'"
@@ -43,9 +47,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dhlpocsynapse'"
 		},
-		"AzureDatabricks1_accessToken": {
+		"hdinsightadfblobrmusti_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+			"metadata": "Secure string for 'connectionString' of 'hdinsightadfblobrmusti'"
+		},
+		"hdinsightsparkondemand_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'hdinsightsparkondemand'"
 		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
@@ -70,6 +86,30 @@
 		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "f2e468ef-7cf1-411c-bef2-98509a126497"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "HDInsightLearning"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "2356dc76-ce1a-468b-b11b-edf2cbebac15"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
+			"type": "string",
+			"defaultValue": "sshuser"
 		}
 	},
 	"variables": {
@@ -167,6 +207,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -237,6 +281,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -309,6 +357,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -381,6 +433,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -561,6 +617,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -860,6 +920,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -1134,6 +1198,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -1182,6 +1250,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1226,6 +1298,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:42:48Z"
 			},
@@ -1470,6 +1546,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"parameters": {
 					"srcfolderName": {
 						"type": "String"
@@ -1512,6 +1592,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -2947,6 +3031,27 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-8958065988037960.0.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"newClusterNodeType": "Standard_NC24",
+					"newClusterNumOfWorker": "1",
+					"newClusterVersion": "5.5.x-gpu-scala2.11",
+					"newClusterInitScripts": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDb_serverless_rmusti_SalesLT_Eastus')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -3091,7 +3196,7 @@
 							"name": "filterwetherdelay"
 						}
 					],
-					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -3132,7 +3237,7 @@
 							"name": "AggMovieRatig"
 						}
 					],
-					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> AvgMovieRatingsbyYear"
+					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> AvgMovieRatingsbyYear"
 				}
 			},
 			"dependsOn": [
@@ -3141,25 +3246,106 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"name": "[concat(parameters('factoryName'), '/HDInsightOnDemandSpark')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CreateOnDemandHDI",
+						"type": "HDInsightSpark",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"rootPath": "adftutorial/spark/script",
+							"entryFilePath": "WordCount_Spark.py",
+							"sparkJobLinkedService": {
+								"referenceName": "hdinsightadfblobrmusti",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "hdinsightsparkondemand",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightsparkondemand')]",
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hdinsightadfblobrmusti')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureDatabricks",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"domain": "https://adb-8958065988037960.0.azuredatabricks.net",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
-					},
-					"newClusterNodeType": "Standard_NC24",
-					"newClusterNumOfWorker": "1",
-					"newClusterVersion": "5.5.x-gpu-scala2.11",
-					"newClusterInitScripts": []
+					"connectionString": "[parameters('hdinsightadfblobrmusti_connectionString')]"
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hdinsightsparkondemand')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "spark",
+					"clusterSize": 2,
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('hdinsightsparkondemand_properties_typeProperties_servicePrincipalId')]",
+					"osType": "Linux",
+					"tenant": "[parameters('hdinsightsparkondemand_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "rm",
+					"clusterUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterUserName')]",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterPassword')]"
+					},
+					"clusterSshUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]",
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterSshPassword')]"
+					},
+					"sparkVersion": "",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_servicePrincipalKey')]"
+					},
+					"linkedServiceName": {
+						"referenceName": "hdinsightadfblobrmusti",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": ""
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]"
+			]
 		}
 	]
 }

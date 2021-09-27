@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
 		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDb_serverless_rmusti_SalesLT_Eastus'"
@@ -43,9 +47,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dhlpocsynapse'"
 		},
-		"AzureDatabricks1_accessToken": {
+		"hdinsightadfblobrmusti_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+			"metadata": "Secure string for 'connectionString' of 'hdinsightadfblobrmusti'"
+		},
+		"hdinsightsparkondemand_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'hdinsightsparkondemand'"
+		},
+		"hdinsightsparkondemand_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'hdinsightsparkondemand'"
 		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
@@ -70,6 +86,30 @@
 		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
 			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "f2e468ef-7cf1-411c-bef2-98509a126497"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "HDInsightLearning"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "2356dc76-ce1a-468b-b11b-edf2cbebac15"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterUserName": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
+			"type": "string",
+			"defaultValue": "sshuser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -104,6 +144,9 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
 					"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
 						"value": "[parameters('AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString')]"
 					},
@@ -122,8 +165,8 @@
 					"dhlpocsynapse_connectionString": {
 						"value": "[parameters('dhlpocsynapse_connectionString')]"
 					},
-					"AzureDatabricks1_accessToken": {
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					"hdinsightadfblobrmusti_connectionString": {
+						"value": "[parameters('hdinsightadfblobrmusti_connectionString')]"
 					},
 					"AzureDataExplorer1_properties_typeProperties_endpoint": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_endpoint')]"
@@ -163,6 +206,33 @@
 					},
 					"SapHanaLinkedService_connectionString": {
 						"value": "[parameters('SapHanaLinkedService_connectionString')]"
+					},
+					"hdinsightsparkondemand_clusterPassword": {
+						"value": "[parameters('hdinsightsparkondemand_clusterPassword')]"
+					},
+					"hdinsightsparkondemand_clusterSshPassword": {
+						"value": "[parameters('hdinsightsparkondemand_clusterSshPassword')]"
+					},
+					"hdinsightsparkondemand_servicePrincipalKey": {
+						"value": "[parameters('hdinsightsparkondemand_servicePrincipalKey')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_servicePrincipalId')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_tenant": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_tenant')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_clusterUserName": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterUserName')]"
+					},
+					"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
+						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]"
 					}
 				}
 			},

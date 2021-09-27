@@ -13,6 +13,176 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ADX Load App Tables",
+						"type": "AzureDataExplorerCommand",
+						"dependsOn": [
+							{
+								"activity": "ADX Load Master Table",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"command": {
+								"value": ".set-or-append OOCLAppData <|\n    OOCLMasterData\n    | extend payloadstr = parse_json(mest_payloadInStr)\n    | extend payload_Key = payloadstr.key , eecEventHistInfo_eventUuid  = payloadstr.eecEventHistInfo.eventUuid , eecEventHistInfo_eventDateTimeGmt =payloadstr.eecEventHistInfo.eventDateTimeGmt \n    | project mest_application, mest_destination,mest_senderTimestamp,payload_Key , eecEventHistInfo_eventUuid ,eecEventHistInfo_eventDateTimeGmt\n    | where cursor_after( \"@{activity('Lookup1').output.firstRow.print_0}\")",
+								"type": "Expression"
+							},
+							"commandTimeout": "00:20:00"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDataExplorer1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ADX Load Master Table",
+						"type": "AzureDataExplorerCommand",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"command": ".ingest into table OOCLMasterData (h'https://mysynapsestorage.blob.core.windows.net/sqlondemand1/json/sample_data.json?sp=r&st=2020-09-10T07:20:12Z&se=2020-09-30T15:20:12Z&spr=https&sv=2019-12-12&sr=b&sig=9lvMwuyvEr%2F4tVDIMFHehVyG8IiMGAZqjXU3OG0X2fU%3D') with '{\"format\":\"multijson\", \"ingestionMappingReference\":\"OOCLMasterData_mapping\"}'",
+							"commandTimeout": "00:20:00"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDataExplorer1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureDataExplorerSource",
+								"query": "print cursor_current()",
+								"queryTimeout": "00:10:00"
+							},
+							"dataset": {
+								"referenceName": "AzureDataExplorerTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADXIngestAppTables_seqnum')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ADX Load TestAppTable",
+						"type": "AzureDataExplorerCommand",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"command": {
+								"value": ".set-or-append TestAppData <|\n    TestTable2\n    | where EventSequenceNumber > toint(\"@{activity('Lookup1').output.firstRow.EventSequenceNumber}\")\n    | project EventSequenceNumber , Metric , Value",
+								"type": "Expression"
+							},
+							"commandTimeout": "00:20:00"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDataExplorer1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureDataExplorerSource",
+								"query": "TestAppData\n| top 1 by EventSequenceNumber desc \n| project EventSequenceNumber",
+								"queryTimeout": "00:10:00"
+							},
+							"dataset": {
+								"referenceName": "AzureDataExplorerTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CopyCSVtoAvro')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -77,6 +247,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": []
@@ -146,6 +320,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": []
@@ -323,6 +501,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -617,6 +799,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -884,6 +1070,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:27:55Z"
 			},
@@ -1126,6 +1316,10 @@
 						]
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"parameters": {
 					"srcfolderName": {
 						"type": "String"
@@ -1171,7 +1365,7 @@
 							"name": "filterwetherdelay"
 						}
 					],
-					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+					"script": "source(output(\n\t\tYEAR as string,\n\t\tFL_DATE as string,\n\t\tOP_UNIQUE_CARRIER as string,\n\t\tOP_CARRIER_AIRLINE_ID as string,\n\t\tOP_CARRIER_FL_NUM as string,\n\t\tORIGIN_AIRPORT_ID as string,\n\t\tORIGIN as string,\n\t\tORIGIN_CITY_NAME as string,\n\t\tORIGIN_STATE_ABR as string,\n\t\tDEST_AIRPORT_ID as string,\n\t\tDEST as string,\n\t\tDEST_CITY_NAME as string,\n\t\tDEST_STATE_ABR as string,\n\t\tDEP_DELAY as string,\n\t\tDEP_DELAY_NEW as string,\n\t\tARR_TIME as string,\n\t\tARR_DELAY_NEW as string,\n\t\tCARRIER_DELAY as string,\n\t\tWEATHER_DELAY as string,\n\t\tNAS_DELAY as string,\n\t\tSECURITY_DELAY as string,\n\t\tLATE_AIRCRAFT_DELAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nfilterwetherdelay aggregate(groupBy(ORIGIN_CITY_NAME),\n\tavgWeatherDelay = avg(toFloat(WEATHER_DELAY))) ~> AverageWeatherDelay\nsource1 filter(toFloat(WEATHER_DELAY) > 0) ~> filterwetherdelay\nAverageWeatherDelay sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string\n\t),\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
 				}
 			},
 			"dependsOn": []
@@ -1209,8 +1403,48 @@
 							"name": "AggMovieRatig"
 						}
 					],
-					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> AvgMovieRatingsbyYear"
+					"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> MovieData\nMovieData filter(toInteger(year) >= 1990 && toInteger(year) <=2000) ~> FilterYear1990to2000\nFilterYear1990to2000 aggregate(groupBy(year),\n\tAvgRating = avg(toInteger(Rating)),\n\t\tAvgRottenRating = avg(toInteger({Rotton Tomato}))) ~> AggMovieRatig\nAggMovieRatig sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['AvgRatingByYear.csv'],\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> AvgMovieRatingsbyYear"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HDInsightOnDemandSpark')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CreateOnDemandHDI",
+						"type": "HDInsightSpark",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"rootPath": "adftutorial/spark/script",
+							"entryFilePath": "WordCount_Spark.py",
+							"sparkJobLinkedService": {
+								"referenceName": "hdinsightadfblobrmusti",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "hdinsightsparkondemand",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -1251,6 +1485,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -1295,6 +1533,10 @@
 						}
 					}
 				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
 				"annotations": [],
 				"lastPublishTime": "2020-08-15T15:42:48Z"
 			},

@@ -11,6 +11,9 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
 		"AzureSqlDb_serverless_rmusti_SalesLT_Eastus_connectionString": {
 			"value": ""
 		},
@@ -32,7 +35,16 @@
 		"dhlpocsynapse_connectionString": {
 			"value": ""
 		},
-		"AzureDatabricks1_accessToken": {
+		"hdinsightadfblobrmusti_connectionString": {
+			"value": ""
+		},
+		"hdinsightsparkondemand_clusterPassword": {
+			"value": ""
+		},
+		"hdinsightsparkondemand_clusterSshPassword": {
+			"value": ""
+		},
+		"hdinsightsparkondemand_servicePrincipalKey": {
 			"value": ""
 		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
@@ -52,6 +64,24 @@
 		},
 		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
 			"value": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
+			"value": "f2e468ef-7cf1-411c-bef2-98509a126497"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup": {
+			"value": "HDInsightLearning"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_servicePrincipalId": {
+			"value": "2356dc76-ce1a-468b-b11b-edf2cbebac15"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_tenant": {
+			"value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterUserName": {
+			"value": "admin"
+		},
+		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
+			"value": "sshuser"
 		},
 		"containerUri": {
 			"value": ""
