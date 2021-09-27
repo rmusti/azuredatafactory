@@ -1,0 +1,36 @@
+{
+	"name": "HDInsightOnDemandHive",
+	"properties": {
+		"activities": [
+			{
+				"name": "CreateHiveRunJob",
+				"type": "HDInsightHive",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"scriptPath": "adfgetstarted/hivescripts/partitionweblogs.hql",
+					"defines": {
+						"inputtable": "hivesampletable",
+						"partitionedtable": "hivesamplepartitionedtable"
+					},
+					"scriptLinkedService": {
+						"referenceName": "hdinsightadfblobrmusti",
+						"type": "LinkedServiceReference"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "HDInsightLinkedService",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
