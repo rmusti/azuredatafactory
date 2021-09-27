@@ -1,10 +1,10 @@
 {
-	"name": "HDInsightOnDemandHive",
+	"name": "HDInsightOnDemandSpark",
 	"properties": {
 		"activities": [
 			{
-				"name": "CreateHiveRunJob",
-				"type": "HDInsightHive",
+				"name": "CreateOnDemandHDI",
+				"type": "HDInsightSpark",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,18 +15,15 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"scriptPath": "adfgetstarted/hivescripts/partitionweblogs.hql",
-					"defines": {
-						"inputtable": "hivesampletable",
-						"partitionedtable": "hivesamplepartitionedtable"
-					},
-					"scriptLinkedService": {
+					"rootPath": "adftutorial/spark/script",
+					"entryFilePath": "WordCount_Spark.py",
+					"sparkJobLinkedService": {
 						"referenceName": "hdinsightadfblobrmusti",
 						"type": "LinkedServiceReference"
 					}
 				},
 				"linkedServiceName": {
-					"referenceName": "HDInsightLinkedService",
+					"referenceName": "hdinsightsparkondemand",
 					"type": "LinkedServiceReference"
 				}
 			}
