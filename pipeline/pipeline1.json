@@ -19,7 +19,7 @@
 					"method": "POST",
 					"authentication": {
 						"type": "MSI",
-						"resource": "https://management.azure.com/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Synapse/workspaces/mysynapseworkspacejuly/azureADOnlyAuthentications/default?api-version=2021-06-01"
+						"resource": "https://management.azure.com/subscriptions/f2e468ef-7cf1-411c-bef2-98509a126497/resourceGroups/SynapseLearning/providers/Microsoft.Synapse/workspaces/mysynapseworkspacejuly"
 					}
 				}
 			}
