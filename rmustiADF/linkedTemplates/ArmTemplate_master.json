@@ -83,10 +83,6 @@
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
 		},
-		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
-			"type": "string",
-			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
-		},
 		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
 			"type": "string",
 			"defaultValue": "f2e468ef-7cf1-411c-bef2-98509a126497"
@@ -110,6 +106,10 @@
 		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
 			"type": "string",
 			"defaultValue": "sshuser"
+		},
+		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
 		},
 		"containerUri": {
 			"type": "string",

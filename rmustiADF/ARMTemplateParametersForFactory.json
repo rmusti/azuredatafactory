@@ -62,9 +62,6 @@
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://mysynapsestorage.dfs.core.windows.net"
 		},
-		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
-			"value": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
-		},
 		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
 			"value": "f2e468ef-7cf1-411c-bef2-98509a126497"
 		},
@@ -82,6 +79,9 @@
 		},
 		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
 			"value": "sshuser"
+		},
+		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
 		}
 	}
 }

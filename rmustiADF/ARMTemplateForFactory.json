@@ -83,10 +83,6 @@
 			"type": "string",
 			"defaultValue": "https://mysynapsestorage.dfs.core.windows.net"
 		},
-		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
-			"type": "string",
-			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
-		},
 		"hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId": {
 			"type": "string",
 			"defaultValue": "f2e468ef-7cf1-411c-bef2-98509a126497"
@@ -110,6 +106,10 @@
 		"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
 			"type": "string",
 			"defaultValue": "sshuser"
+		},
+		"sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/6992c54f-f312-437d-8489-4bd8265ad2bb/resourcegroups/pkresourcegrp/providers/Microsoft.DataFactory/factories/adfactoryname/integrationruntimes/integrationRuntimeHANA"
 		}
 	},
 	"variables": {
@@ -442,6 +442,49 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/yellowtaxi_csv_adls')]",
 				"[concat(variables('factoryId'), '/datasets/yellowtaxi_ORC_adls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HDInsightOnDemandSpark')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CreateOnDemandHDI",
+						"type": "HDInsightSpark",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"rootPath": "adftutorial/spark/script",
+							"entryFilePath": "WordCount_Spark.py",
+							"sparkJobLinkedService": {
+								"referenceName": "hdinsightadfblobrmusti",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "hdinsightsparkondemand",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]",
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightsparkondemand')]"
 			]
 		},
 		{
@@ -3149,6 +3192,65 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/hdinsightadfblobrmusti')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('hdinsightadfblobrmusti_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hdinsightsparkondemand')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "spark",
+					"clusterSize": 2,
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup')]",
+					"servicePrincipalId": "[parameters('hdinsightsparkondemand_properties_typeProperties_servicePrincipalId')]",
+					"osType": "Linux",
+					"tenant": "[parameters('hdinsightsparkondemand_properties_typeProperties_tenant')]",
+					"clusterNamePrefix": "rm",
+					"clusterUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterUserName')]",
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterPassword')]"
+					},
+					"clusterSshUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]",
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_clusterSshPassword')]"
+					},
+					"sparkVersion": "",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('hdinsightsparkondemand_servicePrincipalKey')]"
+					},
+					"linkedServiceName": {
+						"referenceName": "hdinsightadfblobrmusti",
+						"type": "LinkedServiceReference"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": ""
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/sharedintegrationRuntimehana')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -3246,14 +3348,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/HDInsightOnDemandSpark')]",
+			"name": "[concat(parameters('factoryName'), '/Copy ADLS to Synapse ProdCat')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "CreateOnDemandHDI",
-						"type": "HDInsightSpark",
+						"name": "Copy Adls to Synapse ProdCat",
+						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -3264,17 +3366,38 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"rootPath": "adftutorial/spark/script",
-							"entryFilePath": "WordCount_Spark.py",
-							"sparkJobLinkedService": {
-								"referenceName": "hdinsightadfblobrmusti",
-								"type": "LinkedServiceReference"
-							}
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowCopyCommand": true,
+								"copyCommandSettings": {}
+							},
+							"enableStaging": false
 						},
-						"linkedServiceName": {
-							"referenceName": "hdinsightsparkondemand",
-							"type": "LinkedServiceReference"
-						}
+						"inputs": [
+							{
+								"referenceName": "adlsSalesLtProdCat",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SynapseSqlSaleLtProductCategory",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -3284,67 +3407,99 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hdinsightsparkondemand')]",
-				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]"
+				"[concat(variables('factoryId'), '/datasets/adlsSalesLtProdCat')]",
+				"[concat(variables('factoryId'), '/datasets/SynapseSqlSaleLtProductCategory')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hdinsightadfblobrmusti')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/adlsSalesLtProdCat')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"connectionString": "[parameters('hdinsightadfblobrmusti_connectionString')]"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "SalesltProductCategory.txt",
+						"folderPath": "csv",
+						"fileSystem": "sqlondemand1"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\"",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hdinsightsparkondemand')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/SynapseSqlSaleLtProductCategory')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics2",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
-				"type": "HDInsightOnDemand",
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "ProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ParentProductCategoryID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "varchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
 				"typeProperties": {
-					"clusterType": "spark",
-					"clusterSize": 2,
-					"timeToLive": "00:15:00",
-					"version": "4.0",
-					"hostSubscriptionId": "[parameters('hdinsightsparkondemand_properties_typeProperties_hostSubscriptionId')]",
-					"clusterResourceGroup": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterResourceGroup')]",
-					"servicePrincipalId": "[parameters('hdinsightsparkondemand_properties_typeProperties_servicePrincipalId')]",
-					"osType": "Linux",
-					"tenant": "[parameters('hdinsightsparkondemand_properties_typeProperties_tenant')]",
-					"clusterNamePrefix": "rm",
-					"clusterUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterUserName')]",
-					"clusterPassword": {
-						"type": "SecureString",
-						"value": "[parameters('hdinsightsparkondemand_clusterPassword')]"
-					},
-					"clusterSshUserName": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]",
-					"clusterSshPassword": {
-						"type": "SecureString",
-						"value": "[parameters('hdinsightsparkondemand_clusterSshPassword')]"
-					},
-					"sparkVersion": "",
-					"servicePrincipalKey": {
-						"type": "SecureString",
-						"value": "[parameters('hdinsightsparkondemand_servicePrincipalKey')]"
-					},
-					"linkedServiceName": {
-						"referenceName": "hdinsightadfblobrmusti",
-						"type": "LinkedServiceReference"
-					},
-					"headNodeSize": "",
-					"dataNodeSize": "",
-					"zookeeperNodeSize": ""
+					"schema": "SalesLT",
+					"table": "ProductCategory"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hdinsightadfblobrmusti')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics2')]"
 			]
 		}
 	]
