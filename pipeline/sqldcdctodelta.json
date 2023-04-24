@@ -1,0 +1,35 @@
+{
+	"name": "sqldcdctodelta",
+	"properties": {
+		"activities": [
+			{
+				"name": "sqlcdctodelta",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "sqlcdctodelta",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine",
+					"continuationSettings": {
+						"customizedCheckpointKey": "4524d9de-b3a6-473d-881d-1a1377329ae3"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
