@@ -203,6 +203,26 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'rmustiADF_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "rmustiADF_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"SapHanaLinkedService_connectionString": {
 						"value": "[parameters('SapHanaLinkedService_connectionString')]"
@@ -233,26 +253,6 @@
 					},
 					"hdinsightsparkondemand_properties_typeProperties_clusterSshUserName": {
 						"value": "[parameters('hdinsightsparkondemand_properties_typeProperties_clusterSshUserName')]"
-					}
-				}
-			},
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'rmustiADF_ArmTemplate_0')]"
-			]
-		},
-		{
-			"name": "rmustiADF_ArmTemplate_2",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-02-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
 					}
 				}
 			},
