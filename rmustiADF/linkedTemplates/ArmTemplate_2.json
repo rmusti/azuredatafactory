@@ -53,6 +53,30 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/yellowtaxi_ORC_adls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Orc",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "ORC",
+						"fileSystem": "sqlondemand1"
+					},
+					"orcCompressionCodec": "zlib",
+					"enablePhysicalSchema": true
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/yellowtaxi_csv_adls')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -756,6 +780,312 @@
 					},
 					"mode": "Microbatch"
 				},
+				"status": "Stopped",
+				"allowVNetOverride": false
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfcdc1')]",
+			"type": "Microsoft.DataFactory/factories/adfcdcs",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"SourceConnectionsInfo": [
+					{
+						"SourceEntities": [
+							{
+								"name": "eh-cointxns",
+								"properties": {
+									"schema": [
+										{
+											"name": "key",
+											"dataType": "binary"
+										},
+										{
+											"name": "value",
+											"dataType": "binary"
+										},
+										{
+											"name": "topic",
+											"dataType": "string"
+										},
+										{
+											"name": "partition",
+											"dataType": "integer"
+										},
+										{
+											"name": "offset",
+											"dataType": "long"
+										},
+										{
+											"name": "timestamp",
+											"dataType": "timestamp"
+										},
+										{
+											"name": "timestampType",
+											"dataType": "integer"
+										}
+									],
+									"dslConnectorProperties": [
+										{
+											"name": "format",
+											"value": "passthrough"
+										},
+										{
+											"name": "eventHubName",
+											"value": "eh-cointxns"
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": false
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": false
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "rmustieventhub",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "EventHubs",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "store",
+									"value": "eventhubs"
+								},
+								{
+									"name": "enableCdc",
+									"value": true
+								},
+								{
+									"name": "skipInitialLoad",
+									"value": true
+								}
+							]
+						}
+					}
+				],
+				"TargetConnectionsInfo": [
+					{
+						"TargetEntities": [
+							{
+								"name": "data-files/sampledata/cointxns",
+								"properties": {
+									"schema": [],
+									"dslConnectorProperties": [
+										{
+											"name": "container",
+											"value": "data-files"
+										},
+										{
+											"name": "fileSystem",
+											"value": "data-files"
+										},
+										{
+											"name": "folderPath",
+											"value": "sampledata/cointxns"
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": true
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": true
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "AzureBlobFS",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "format",
+									"value": "delta"
+								},
+								{
+									"name": "mergeSchema",
+									"value": true
+								},
+								{
+									"name": "autoCompact",
+									"value": true
+								},
+								{
+									"name": "optimizedWrite",
+									"value": true
+								},
+								{
+									"name": "deletable",
+									"value": false
+								},
+								{
+									"name": "insertable",
+									"value": true
+								},
+								{
+									"name": "updateable",
+									"value": false
+								},
+								{
+									"name": "upsertable",
+									"value": false
+								},
+								{
+									"name": "skipDuplicateMapInputs",
+									"value": true
+								},
+								{
+									"name": "skipDuplicateMapOutputs",
+									"value": true
+								}
+							]
+						},
+						"DataMapperMappings": [
+							{
+								"targetEntityName": "data-files/sampledata/cointxns",
+								"sourceEntityName": "eh-cointxns",
+								"sourceConnectionReference": {
+									"connectionName": "rmustieventhub",
+									"type": "linkedservicetype"
+								},
+								"attributeMappingInfo": {
+									"attributeMappings": [
+										{
+											"name": "key",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "key",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "offset",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "offset",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "partition",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "partition",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "timestamp",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "timestamp",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "timestampType",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "timestampType",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "topic",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "topic",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "value",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "value",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										}
+									]
+								}
+							}
+						],
+						"Relationships": []
+					}
+				],
+				"Policy": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1
+					},
+					"mode": "Microbatch"
+				},
 				"allowVNetOverride": false
 			},
 			"dependsOn": []
@@ -1199,7 +1529,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/yellowtaxi_csv_adls')]"
+				"[concat(variables('factoryId'), '/datasets/yellowtaxi_csv_adls')]",
+				"[concat(variables('factoryId'), '/datasets/yellowtaxi_ORC_adls')]"
 			]
 		},
 		{
@@ -2373,102 +2704,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformFlightData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "AverageDelay",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "AverageDelay",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/AverageDelay')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformMovieData')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "TransformMovie Dataflow",
-						"description": "This transforms movie data set",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "TransformMovieData",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"MovieData": {},
-									"AvgMovieRatingsbyYear": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2020-08-15T15:42:48Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/TransformMovieData')]"
-			]
 		}
 	]
 }

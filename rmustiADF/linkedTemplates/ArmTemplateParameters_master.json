@@ -47,6 +47,9 @@
 		"hdinsightsparkondemand_servicePrincipalKey": {
 			"value": ""
 		},
+		"rmustieventhub_accessKey": {
+			"value": ""
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"value": "https://rmustiadxcluster.eastus.kusto.windows.net"
 		},

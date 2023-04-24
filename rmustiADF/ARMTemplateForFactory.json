@@ -63,6 +63,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'servicePrincipalKey' of 'hdinsightsparkondemand'"
 		},
+		"rmustieventhub_accessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessKey' of 'rmustieventhub'"
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
@@ -4211,10 +4215,337 @@
 					},
 					"mode": "Microbatch"
 				},
+				"status": "Stopped",
 				"allowVNetOverride": false
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDb_serverless_rmusti_SalesLT_Eastus')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/rmustieventhub')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "EventHubs",
+				"typeProperties": {
+					"namespaceName": "rmustieventhub",
+					"accessKeyName": "RootManageSharedAccessKey",
+					"accessKey": {
+						"type": "SecureString",
+						"value": "[parameters('rmustieventhub_accessKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfcdc1')]",
+			"type": "Microsoft.DataFactory/factories/adfcdcs",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"SourceConnectionsInfo": [
+					{
+						"SourceEntities": [
+							{
+								"name": "eh-cointxns",
+								"properties": {
+									"schema": [
+										{
+											"name": "key",
+											"dataType": "binary"
+										},
+										{
+											"name": "value",
+											"dataType": "binary"
+										},
+										{
+											"name": "topic",
+											"dataType": "string"
+										},
+										{
+											"name": "partition",
+											"dataType": "integer"
+										},
+										{
+											"name": "offset",
+											"dataType": "long"
+										},
+										{
+											"name": "timestamp",
+											"dataType": "timestamp"
+										},
+										{
+											"name": "timestampType",
+											"dataType": "integer"
+										}
+									],
+									"dslConnectorProperties": [
+										{
+											"name": "format",
+											"value": "passthrough"
+										},
+										{
+											"name": "eventHubName",
+											"value": "eh-cointxns"
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": false
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": false
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "rmustieventhub",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "EventHubs",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "store",
+									"value": "eventhubs"
+								},
+								{
+									"name": "enableCdc",
+									"value": true
+								},
+								{
+									"name": "skipInitialLoad",
+									"value": true
+								}
+							]
+						}
+					}
+				],
+				"TargetConnectionsInfo": [
+					{
+						"TargetEntities": [
+							{
+								"name": "data-files/sampledata/cointxns",
+								"properties": {
+									"schema": [],
+									"dslConnectorProperties": [
+										{
+											"name": "container",
+											"value": "data-files"
+										},
+										{
+											"name": "fileSystem",
+											"value": "data-files"
+										},
+										{
+											"name": "folderPath",
+											"value": "sampledata/cointxns"
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": true
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": true
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "AzureBlobFS",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "format",
+									"value": "delta"
+								},
+								{
+									"name": "mergeSchema",
+									"value": true
+								},
+								{
+									"name": "autoCompact",
+									"value": true
+								},
+								{
+									"name": "optimizedWrite",
+									"value": true
+								},
+								{
+									"name": "deletable",
+									"value": false
+								},
+								{
+									"name": "insertable",
+									"value": true
+								},
+								{
+									"name": "updateable",
+									"value": false
+								},
+								{
+									"name": "upsertable",
+									"value": false
+								},
+								{
+									"name": "skipDuplicateMapInputs",
+									"value": true
+								},
+								{
+									"name": "skipDuplicateMapOutputs",
+									"value": true
+								}
+							]
+						},
+						"DataMapperMappings": [
+							{
+								"targetEntityName": "data-files/sampledata/cointxns",
+								"sourceEntityName": "eh-cointxns",
+								"sourceConnectionReference": {
+									"connectionName": "rmustieventhub",
+									"type": "linkedservicetype"
+								},
+								"attributeMappingInfo": {
+									"attributeMappings": [
+										{
+											"name": "key",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "key",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "offset",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "offset",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "partition",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "partition",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "timestamp",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "timestamp",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "timestampType",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "timestampType",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "topic",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "topic",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "value",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "value",
+												"entity": "eh-cointxns",
+												"entityConnectionReference": {
+													"connectionName": "rmustieventhub",
+													"type": "linkedservicetype"
+												}
+											}
+										}
+									]
+								}
+							}
+						],
+						"Relationships": []
+					}
+				],
+				"Policy": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1
+					},
+					"mode": "Microbatch"
+				},
+				"allowVNetOverride": false
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/rmustieventhub')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		}

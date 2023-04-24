@@ -47,6 +47,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hdinsightadfblobrmusti'"
 		},
+		"rmustieventhub_accessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessKey' of 'rmustieventhub'"
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
@@ -236,6 +240,24 @@
 					"linkedInfo": {
 						"resourceId": "[parameters('sharedintegrationRuntimehana_properties_typeProperties_linkedInfo_resourceId')]",
 						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/rmustieventhub')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "EventHubs",
+				"typeProperties": {
+					"namespaceName": "rmustieventhub",
+					"accessKeyName": "RootManageSharedAccessKey",
+					"accessKey": {
+						"type": "SecureString",
+						"value": "[parameters('rmustieventhub_accessKey')]"
 					}
 				}
 			},
@@ -666,38 +688,6 @@
 						"type": "String"
 					}
 				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SalesLTCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@CONCAT('Incremental-', pipeline().RunId, '.csv')",
-							"type": "Expression"
-						},
-						"folderPath": "IncrementalCopy/DIM_Customer",
-						"fileSystem": "adftutorial"
-					},
-					"columnDelimiter": ",",
-					"rowDelimiter": "\n",
-					"escapeChar": "\"",
-					"quoteChar": "\""
-				},
-				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"

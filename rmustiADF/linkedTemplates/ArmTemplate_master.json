@@ -63,6 +63,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'servicePrincipalKey' of 'hdinsightsparkondemand'"
 		},
+		"rmustieventhub_accessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessKey' of 'rmustieventhub'"
+		},
 		"AzureDataExplorer1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://rmustiadxcluster.eastus.kusto.windows.net"
@@ -168,6 +172,9 @@
 					"hdinsightadfblobrmusti_connectionString": {
 						"value": "[parameters('hdinsightadfblobrmusti_connectionString')]"
 					},
+					"rmustieventhub_accessKey": {
+						"value": "[parameters('rmustieventhub_accessKey')]"
+					},
 					"AzureDataExplorer1_properties_typeProperties_endpoint": {
 						"value": "[parameters('AzureDataExplorer1_properties_typeProperties_endpoint')]"
 					},
@@ -258,6 +265,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'rmustiADF_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "rmustiADF_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'rmustiADF_ArmTemplate_2')]"
 			]
 		}
 	]
