@@ -27,7 +27,7 @@
 				"     validateSchema: false,",
 				"     enableNativeCdc: true,",
 				"     netChanges: true,",
-				"     skipInitialLoad: true,",
+				"     skipInitialLoad: false,",
 				"     format: 'table',",
 				"     store: 'sqlserver',",
 				"     schemaName: 'SalesLT',",
