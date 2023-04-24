@@ -3735,6 +3735,488 @@
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDb_serverless_rmusti_SalesLT_Eastus')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/adfcdcsqltodelta')]",
+			"type": "Microsoft.DataFactory/factories/adfcdcs",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"SourceConnectionsInfo": [
+					{
+						"SourceEntities": [
+							{
+								"name": "SalesLT.Customer",
+								"properties": {
+									"schema": [
+										{
+											"name": "CustomerID",
+											"dataType": "integer"
+										},
+										{
+											"name": "NameStyle",
+											"dataType": "boolean"
+										},
+										{
+											"name": "Title",
+											"dataType": "string"
+										},
+										{
+											"name": "FirstName",
+											"dataType": "string"
+										},
+										{
+											"name": "MiddleName",
+											"dataType": "string"
+										},
+										{
+											"name": "LastName",
+											"dataType": "string"
+										},
+										{
+											"name": "Suffix",
+											"dataType": "string"
+										},
+										{
+											"name": "CompanyName",
+											"dataType": "string"
+										},
+										{
+											"name": "SalesPerson",
+											"dataType": "string"
+										},
+										{
+											"name": "EmailAddress",
+											"dataType": "string"
+										},
+										{
+											"name": "Phone",
+											"dataType": "string"
+										},
+										{
+											"name": "PasswordHash",
+											"dataType": "string"
+										},
+										{
+											"name": "PasswordSalt",
+											"dataType": "string"
+										},
+										{
+											"name": "rowguid",
+											"dataType": "string"
+										},
+										{
+											"name": "ModifiedDate",
+											"dataType": "timestamp"
+										}
+									],
+									"dslConnectorProperties": [
+										{
+											"name": "schemaName",
+											"value": "SalesLT"
+										},
+										{
+											"name": "tableName",
+											"value": "Customer"
+										},
+										{
+											"name": "enableNativeCdc",
+											"value": true
+										},
+										{
+											"name": "netChanges",
+											"value": true
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": false
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": false
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "AzureSqlDatabase",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "format",
+									"value": "table"
+								},
+								{
+									"name": "store",
+									"value": "sqlserver"
+								},
+								{
+									"name": "databaseType",
+									"value": "databaseType"
+								},
+								{
+									"name": "database",
+									"value": "database"
+								},
+								{
+									"name": "skipInitialLoad",
+									"value": true
+								}
+							]
+						}
+					}
+				],
+				"TargetConnectionsInfo": [
+					{
+						"TargetEntities": [
+							{
+								"name": "data-files/sampledata/SalesLT.Customer",
+								"properties": {
+									"schema": [],
+									"dslConnectorProperties": [
+										{
+											"name": "container",
+											"value": "data-files"
+										},
+										{
+											"name": "fileSystem",
+											"value": "data-files"
+										},
+										{
+											"name": "folderPath",
+											"value": "sampledata/SalesLT.Customer"
+										},
+										{
+											"name": "allowSchemaDrift",
+											"value": true
+										},
+										{
+											"name": "inferDriftedColumnTypes",
+											"value": true
+										},
+										{
+											"name": "keys",
+											"value": [
+												"CustomerID"
+											]
+										},
+										{
+											"name": "deletable",
+											"value": true
+										},
+										{
+											"name": "updateable",
+											"value": true
+										},
+										{
+											"name": "upsertable",
+											"value": true
+										},
+										{
+											"name": "defaultToUpsert",
+											"value": true
+										}
+									]
+								}
+							}
+						],
+						"Connection": {
+							"linkedService": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"linkedServiceType": "AzureBlobFS",
+							"type": "linkedservicetype",
+							"isInlineDataset": true,
+							"commonDslConnectorProperties": [
+								{
+									"name": "allowSchemaDrift",
+									"value": true
+								},
+								{
+									"name": "inferDriftedColumnTypes",
+									"value": true
+								},
+								{
+									"name": "format",
+									"value": "delta"
+								},
+								{
+									"name": "mergeSchema",
+									"value": true
+								},
+								{
+									"name": "autoCompact",
+									"value": true
+								},
+								{
+									"name": "optimizedWrite",
+									"value": true
+								},
+								{
+									"name": "deletable",
+									"value": false
+								},
+								{
+									"name": "insertable",
+									"value": true
+								},
+								{
+									"name": "updateable",
+									"value": false
+								},
+								{
+									"name": "upsertable",
+									"value": false
+								},
+								{
+									"name": "skipDuplicateMapInputs",
+									"value": true
+								},
+								{
+									"name": "skipDuplicateMapOutputs",
+									"value": true
+								}
+							]
+						},
+						"DataMapperMappings": [
+							{
+								"targetEntityName": "data-files/sampledata/SalesLT.Customer",
+								"sourceEntityName": "SalesLT.Customer",
+								"sourceConnectionReference": {
+									"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+									"type": "linkedservicetype"
+								},
+								"attributeMappingInfo": {
+									"attributeMappings": [
+										{
+											"name": "CompanyName",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "CompanyName",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "CustomerID",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "CustomerID",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "EmailAddress",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "EmailAddress",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "FirstName",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "FirstName",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "LastName",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "LastName",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "MiddleName",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "MiddleName",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "ModifiedDate",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "ModifiedDate",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "NameStyle",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "NameStyle",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "PasswordHash",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "PasswordHash",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "PasswordSalt",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "PasswordSalt",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "Phone",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "Phone",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "rowguid",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "rowguid",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "SalesPerson",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "SalesPerson",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "Suffix",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "Suffix",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										},
+										{
+											"name": "Title",
+											"type": "Direct",
+											"functionName": "",
+											"attributeReference": {
+												"name": "Title",
+												"entity": "SalesLT.Customer",
+												"entityConnectionReference": {
+													"connectionName": "AzureSqlDb_serverless_rmusti_SalesLT_Eastus",
+													"type": "linkedservicetype"
+												}
+											}
+										}
+									]
+								}
+							}
+						],
+						"Relationships": []
+					}
+				],
+				"Policy": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15
+					},
+					"mode": "Microbatch"
+				},
+				"allowVNetOverride": false
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDb_serverless_rmusti_SalesLT_Eastus')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
 		}
 	]
 }
